@@ -54,7 +54,6 @@ MELCOW_NEW_USERS = is_enabled((environ.get('MELCOW_NEW_USERS', "True")), True)
 PROTECT_CONTENT = is_enabled((environ.get('PROTECT_CONTENT', "True")), False)
 PUBLIC_FILE_STORE = is_enabled((environ.get('PUBLIC_FILE_STORE', "False")), False)
 
-
 #LazyRenamer Configs
 FLOOD = int(environ.get("FLOOD", "10"))
 LAZY_MODE = bool(environ.get("LAZY_MODE"))
@@ -68,15 +67,14 @@ ADMIN_USRNM = environ.get('ADMIN_REQ_TEMPLATE','admin_UserName') # WITHOUT @
 MAIN_CHANNEL_USRNM = environ.get('ADMIN_REQ_TEMPLATE','Channel_UserName') # WITHOUT @
 DEV_CHANNEL_USRNM = environ.get('ADMIN_REQ_TEMPLATE','LayDeveloperr') # WITHOUT @
 LAZY_YT_HANDLE = environ.get('ADMIN_REQ_TEMPLATE','LayDeveloperr')  # WITHOUT @ [  add only handle - don't add full url  ] 
-MOVIE_GROUP_ID = int(environ.get('MOVIE_GROUP_ID', -100999999))
+MOVIE_GROUP_ID = int(environ.get('MOVIE_GROUP_ID', -1001883992600))
 
 # Url Shortner
 lazy_groups = environ.get('LAZY_GROUPS','-1001883992600')
 LAZY_GROUPS = [int(lazygroups) for lazygroups in lazy_groups.split()] if lazy_groups else None # ADD GROUP ID IN THIS VARIABLE
 URL_MODE = bool(environ.get("URL_MODE", "True"))
-URL_SHORTENR_WEBSITE = environ.get('URL_SHORTENR_WEBSITE', 'api.shareus.in/shortLink')
-URL_SHORTNER_WEBSITE_API = environ.get('URL_SHORTNER_WEBSITE_API', 'I3Khu0fwfbWpd1W2ofcyP2znDA12')
-
+URL_SHORTENR_WEBSITE = environ.get('URL_SHORTENR_WEBSITE', 'shrinkearn.com')
+URL_SHORTNER_WEBSITE_API = environ.get('URL_SHORTNER_WEBSITE_API', '56fe01fe5cae862eab7bf841701e5b964adaf3b4')
 
 # Auto Delete For Group Message (Self Delete) #
 SELF_DELETE_SECONDS = int(environ.get('SELF_DELETE_SECONDS', 180))
@@ -91,7 +89,6 @@ DOWNLOAD_TEXT_URL = "https://t.me/LazyDeveloper"
 # Custom Caption Under Button #
 CAPTION_BUTTON = "Get Updates"
 CAPTION_BUTTON_URL = "https://t.me/LazyDeveloper"
-
 
 LOG_STR = "Current Cusomized Configurations are:-\n"
 LOG_STR += ("IMDB Results are enabled, Bot will be showing imdb details for you queries.\n" if IMDB else "IMBD Results are disabled.\n")
