@@ -438,16 +438,16 @@ async def settings(client, message):
                     callback_data=f'setgs#botpm#{settings["botpm"]}#{grp_id}',
                 ),
             ],
-            [
-                InlineKeyboardButton(
-                    'File Secure',
-                    callback_data=f'setgs#file_secure#{settings["file_secure"]}#{grp_id}',
-                ),
-                InlineKeyboardButton(
-                    '✅ Yes' if settings["file_secure"] else '❌ No',
-                    callback_data=f'setgs#file_secure#{settings["file_secure"]}#{grp_id}',
-                ),
-            ],
+            # [
+            #     InlineKeyboardButton(
+            #         'File Secure',
+            #         callback_data=f'setgs#file_secure#{settings["file_secure"]}#{grp_id}',
+            #     ),
+            #     InlineKeyboardButton(
+            #         '✅ Yes' if settings["file_secure"] else '❌ No',
+            #         callback_data=f'setgs#file_secure#{settings["file_secure"]}#{grp_id}',
+            #     ),
+            # ],
             [
                 InlineKeyboardButton(
                     'IMDB',

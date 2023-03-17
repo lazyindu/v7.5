@@ -864,12 +864,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     InlineKeyboardButton('✅ Yes' if settings["botpm"] else '❌ No',
                                          callback_data=f'setgs#botpm#{settings["botpm"]}#{str(grp_id)}')
                 ],
-                [
-                    InlineKeyboardButton('File Secure',
-                                         callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✅ Yes' if settings["file_secure"] else '❌ No',
-                                         callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}')
-                ],
+                # [
+                #     InlineKeyboardButton('File Secure',
+                #                          callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}'),
+                #     InlineKeyboardButton('✅ Yes' if settings["file_secure"] else '❌ No',
+                #                          callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}')
+                # ],
                 [
                     InlineKeyboardButton('IMDB', callback_data=f'setgs#imdb#{settings["imdb"]}#{str(grp_id)}'),
                     InlineKeyboardButton('✅ Yes' if settings["imdb"] else '❌ No',
@@ -943,7 +943,7 @@ async def auto_filter(client, msg, spoll=False):
             else:
                 btn = [
                 [
-                    InlineKeyboardButton(text=f"[{get_size(file.file_size)}] {file.file_name}", url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{pre}#{file.file_id}")),
+                    InlineKeyboardButton(text=f"[{get_size(file.file_size)}] {file.file_name}", url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")),
                 ]
                 for file in files
                 ]
@@ -980,11 +980,11 @@ async def auto_filter(client, msg, spoll=False):
                 [
                     InlineKeyboardButton(
                         text=f"[{get_size(file.file_size)}] {file.file_name}", 
-                        url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{pre}#{file.file_id}")
+                        url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
                     ),
                     InlineKeyboardButton(
                         text=f"[{get_size(file.file_size)}] {file.file_name}", 
-                        url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{pre}#{file.file_id}")
+                        url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
                     ),
                 ]
                 for file in files
