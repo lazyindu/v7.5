@@ -54,9 +54,6 @@ MELCOW_NEW_USERS = is_enabled((environ.get('MELCOW_NEW_USERS', "True")), True)
 PROTECT_CONTENT = is_enabled((environ.get('PROTECT_CONTENT', "True")), False)
 PUBLIC_FILE_STORE = is_enabled((environ.get('PUBLIC_FILE_STORE', "False")), False)
 
-# URL Shortener
-URL_SHORTENR_WEBSITE = environ.get('URL_SHORTENR_WEBSITE', 'api.shareus.in/shortLink')
-URL_SHORTNER_WEBSITE_API = environ.get('URL_SHORTNER_WEBSITE_API', 'I3Khu0fwfbWpd1W2ofcyP2znDA12')
 
 #LazyRenamer Configs
 FLOOD = int(environ.get("FLOOD", "10"))
@@ -66,10 +63,20 @@ lazy_renamers = [int(lazrenamers) if id_pattern.search(lazrenamers) else lazrena
 LAZY_RENAMERS = (lazy_renamers + ADMINS) if lazy_renamers else []
 REQ_CHANNEL = int(environ.get('REQ_CHANNEL'))
 
+# Requested Content template variables ---
+ADMIN_USRNM = environ.get('ADMIN_REQ_TEMPLATE','admin_UserName') # WITHOUT @
+MAIN_CHANNEL_USRNM = environ.get('ADMIN_REQ_TEMPLATE','Channel_UserName') # WITHOUT @
+DEV_CHANNEL_USRNM = environ.get('ADMIN_REQ_TEMPLATE','LayDeveloperr') # WITHOUT @
+LAZY_YT_HANDLE = environ.get('ADMIN_REQ_TEMPLATE','LayDeveloperr')  # WITHOUT @ [  add only handle - don't add full url  ] 
+MOVIE_GROUP_ID = int(environ.get('MOVIE_GROUP_ID', -100999999))
+
 # Url Shortner
 lazy_groups = environ.get('LAZY_GROUPS','-1001883992600')
-LAZY_GROUPS = [int(lazygroups) for lazygroups in lazy_groups.split()] if lazy_groups else None
+LAZY_GROUPS = [int(lazygroups) for lazygroups in lazy_groups.split()] if lazy_groups else None # ADD GROUP ID IN THIS VARIABLE
 URL_MODE = bool(environ.get("URL_MODE", "True"))
+URL_SHORTENR_WEBSITE = environ.get('URL_SHORTENR_WEBSITE', 'api.shareus.in/shortLink')
+URL_SHORTNER_WEBSITE_API = environ.get('URL_SHORTNER_WEBSITE_API', 'I3Khu0fwfbWpd1W2ofcyP2znDA12')
+
 
 # Auto Delete For Group Message (Self Delete) #
 SELF_DELETE_SECONDS = int(environ.get('SELF_DELETE_SECONDS', 180))

@@ -40,6 +40,8 @@ logger.setLevel(logging.ERROR)
 BUTTONS = {}
 SPELL_CHECK = {}
 
+pattern = r'^➟ 📝𝘾𝙤𝙣𝙩𝙚𝙣𝙩 𝙣𝙖𝙢𝙚 : (.*)$'
+
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
@@ -307,6 +309,7 @@ async def advantage_spoll_choker(bot, query):
 # Born to make history @LazyDeveloper !
 @Client.on_callback_query()
 async def cb_handler(client: Client, query: CallbackQuery):
+    search = query.message.text
     if query.data == "close_data":
         await query.message.delete()
     elif query.data == "delallconfirm":
@@ -812,6 +815,104 @@ async def cb_handler(client: Client, query: CallbackQuery):
             reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
         )
+    elif query.data == "exit":
+        if query.from_user.id not in ADMINS:
+            await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴄʟᴏsᴇ ᴛʜɪs.", show_alert = True)
+            return
+        await query.message.delete()
+    elif query.data == "already_uploaded":
+        if query.from_user.id not in ADMINS:
+            await query.answer("Sorry Darling! You can't make any changes...")
+            return
+        else:
+            message = message.text
+            chat_id = message.chat_id
+            extracted_line = re.search(pattern, message, re.MULTILINE)
+            if extracted_line:
+              # Send the extracted line to the other group chat
+                buttons = [
+                [ InlineKeyboardButton("⨳ ok ⨳", callback_data="exit") ]
+                ]
+                reply_markup = InlineKeyboardMarkup(buttons)
+                await client.send_message(MOVIE_GROUP_ID, text=extracted_line.group(1))
+
+    # elif query.data.startswith("req_upld"):
+    #     if query.from_user.id not in ADMINS:
+    #         await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴛʜɪs", show_alert = True)
+    #         return
+    #     mess_id = query.data.split()[1]
+    #     bmess_id = query.data.split()[2]
+    #     await client.delete_messages(MOVIE_GROUP_ID, message_ids=int(bmess_id))
+    #     await query.edit_message_text(text=f"<s>{query.message.text}</s>",
+    #         disable_web_page_preview=True,
+    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="✅️ Uᴘʟᴏᴀᴅᴇᴅ ✅️", callback_data="doneupld")]])
+    #     )
+    #     await client.send_message(MOVIE_GROUP_ID, text=script.DONE_UPLOAD2,
+    #         reply_to_message_id=int(mess_id),
+    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Cᴏᴍᴘʟᴇᴛᴇᴅ Rᴇǫᴜᴇsᴛ ✅️", url=f"{query.message.link}")]]),
+    #     )            
+    # elif query.data.startswith("req_unabl"):
+    #     if query.from_user.id not in ADMINS:
+    #         await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴛʜɪs", show_alert = True)
+    #         return
+    #     mess_id = query.data.split()[1]
+    #     bmess_id = query.data.split()[2]
+    #     await client.delete_messages(MOVIE_GROUP_ID, message_ids=int(bmess_id))
+    #     await query.edit_message_text(text=f"<s>{query.message.text}</s>",
+    #         disable_web_page_preview=True,
+    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="⚠️ Uɴᴀᴠᴀɪʟᴀʙʟᴇ ⚠️", callback_data="notavl")]])
+    #     )
+    #     await client.send_message(MOVIE_GROUP_ID, text=script.REQ_NO2,
+    #         reply_to_message_id=int(mess_id),            
+    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Cʜᴇᴄᴋ Yᴏᴜʀ Rᴇǫᴜᴇsᴛ ⚠️", url=f"{query.message.link}")]]),
+    #     )
+    # elif query.data.startswith("req_dcln"):
+    #     if query.from_user.id not in ADMINS:
+    #         await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴛʜɪs", show_alert = True)
+    #         return
+    #     mess_id = query.data.split()[1]
+    #     bmess_id = query.data.split()[2]
+    #     await client.delete_messages(MOVIE_GROUP_ID, message_ids=int(bmess_id))
+    #     await query.edit_message_text(text=f"<s>{query.message.text}</s>",
+    #         disable_web_page_preview=True,
+    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="❌ Rᴇᴊᴇᴄᴛᴇᴅ ❌", callback_data="rjctreq")]])
+    #     )
+    #     await client.send_message(MOVIE_GROUP_ID, text=script.REQ_REJECT2,
+    #         reply_to_message_id=int(mess_id),
+    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Cʜᴇᴄᴋ Yᴏᴜʀ Rᴇǫᴜᴇsᴛ ❌", url=f"{query.message.link}")]]),
+    #     )
+    # elif query.data.startswith("req_aval"):
+    #     if query.from_user.id not in ADMINS:
+    #         await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴛʜɪs", show_alert = True)
+    #         return
+    #     mess_id = query.data.split()[1]
+    #     bmess_id = query.data.split()[2]
+    #     await client.delete_messages(MOVIE_GROUP_ID, message_ids=int(bmess_id))
+    #     await query.edit_message_text(text=f"<s>{query.message.text}</s>",
+    #         disable_web_page_preview=True,
+    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="♻️ Aʟʀᴇᴀᴅʏ Aᴠᴀɪʟᴀʙʟᴇ ♻️", callback_data="donealrd")]])
+    #     )
+    #     await client.send_message(MOVIE_GROUP_ID, text=script.DONE_ALREADY2,
+    #         reply_to_message_id=int(mess_id),
+    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Cʜᴇᴄᴋ Yᴏᴜʀ Rᴇǫᴜᴇsᴛ ♻️", url=f"{query.message.link}")]]),
+    #     )
+    # elif query.data.startswith("morbtn"):
+    #     if query.from_user.id not in ADMINS:
+    #         await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴛʜɪs", show_alert = True)
+    #         return
+    #     mess_id = query.data.split()[1]
+    #     bmess_id = query.data.split()[2]
+    #     mrbtn = [[
+    #               InlineKeyboardButton(text="Aʟʀᴇᴀᴅʏ Aᴠᴀɪʟᴀʙʟᴇ", callback_data=f"req_aval {mess_id} {bmess_id}")
+    #             ],[
+    #               InlineKeyboardButton(text="Uɴᴀᴠᴀɪʟᴀʙʟᴇ", callback_data=f"req_unabl {mess_id} {bmess_id}"),
+    #               InlineKeyboardButton(text="Rᴇᴊᴇᴄᴛ", callback_data=f"req_dcln {mess_id} {bmess_id}")
+    #             ],[
+    #               InlineKeyboardButton(text="Uᴘʟᴏᴀᴅᴇᴅ", callback_data=f"req_upld {mess_id} {bmess_id}")
+    #             ]]
+    #     reply_markup = InlineKeyboardMarkup(mrbtn)
+    #     await query.message.edit_reply_markup(reply_markup)
+
     elif query.data == "cancel":
         try:
             await query.message.delete()
@@ -904,10 +1005,15 @@ async def auto_filter(client, msg, spoll=False):
             files, offset, total_results = await get_search_results(search.lower(), offset=0, filter=True)
             if not files:
                 await client.send_message(req_channel,f"-🦋 #REQUESTED_CONTENT 🦋-\n\n📝**Content Name** :`{search}`\n**Requested By**: {message.from_user.first_name}\n **USER ID**:{message.from_user.id}\n\n🗃️",
-                                                                                                       reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔺 Mark as Done 🔺", callback_data="close_data")]]))
-                l = await message.reply_text(text=f"△ 𝙷𝚎𝚢 𝚜𝚘𝚗𝚊 `{message.from_user.first_name}` 😎,\n\nʏᴏᴜʀ ʀᴇQᴜᴇꜱᴛ ʜᴀꜱ ʙᴇᴇɴ ꜱᴇɴᴛ ᴛᴏ ᴏᴜʀ **ᴀᴅᴍɪɴ'ꜱ ᴅᴀꜱʜʙᴏᴀʀᴅ** !\nᴘʟᴇᴀꜱᴇ ᴋᴇᴇᴘ ꜱᴏᴍᴇ ᴘᴀᴛɪᴇɴᴄᴇ !\nᴛʜᴇʏ ᴡɪʟʟ ᴜᴘʟᴏᴀᴅ ɪᴛ ᴀꜱ ꜱᴏᴏɴ ᴀꜱ ᴘᴏꜱꜱɪʙʟᴇ.\n\n➟ 📝𝘾𝙤𝙣𝙩𝙚𝙣𝙩 𝙣𝙖𝙢𝙚 : `{search}`\n➟ 👮𝙍𝙚𝙦𝙪𝙚𝙨𝙩𝙚𝙙 𝘽𝙮 : `{message.from_user.first_name}`\n\n༺ @real_MoviesAdda2 ༻\n\n🦋・‥☆𝘼𝘿𝙈𝙞𝙉 𝙨𝙪𝙥𝙥𝙤𝙧𝙩☆‥・🦋\n╰┈➤・☆ @aAdil_h\n╰┈➤・☆ @LazyDeveloperr",
-                                                                                                       reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("━ • │▌║  ᗩᗪᗪ ʍɛ 2 ᑌᖇ Ǥᖇᗝᑌᑭ  ║▌│ • ━", url=f'http://t.me/{temp.U_NAME}?startgroup=true')],[InlineKeyboardButton("✪ Dev Ch- ✪", url="https://t.me/LazyDeveloper"), InlineKeyboardButton("✪ ＹＴ ✪", url="https://youtube.com/@LazyDeveloperr"), InlineKeyboardButton("✪ Main Ch- ✪", url="https://t.me/real_MoviesAdda2")],[InlineKeyboardButton("╚»♥️Thank u MoviesAdda™♥️«╝", callback_data="close_data")]]))
-                await asyncio.sleep(60)
+                                                                                                       reply_markup=InlineKeyboardMarkup([
+                                                                                                                                        [InlineKeyboardButton(" Already Uploaded ", callback_data="already_uploaded")],
+                                                                                                                                        [InlineKeyboardButton(" Not Available ", callback_data="req_unavailable"),InlineKeyboardButton(" Reject ", callback_data="reject_request")],
+                                                                                                                                        [InlineKeyboardButton("🔺 Mark as Done 🔺", callback_data="close_data")],
+                                                                                                                                        ]))
+                
+                l = await message.reply_text(text=f"△ 𝙷𝚎𝚢 𝚜𝚘𝚗𝚊 `{message.from_user.first_name}` 😎,\n\nʏᴏᴜʀ ʀᴇQᴜᴇꜱᴛ ʜᴀꜱ ʙᴇᴇɴ ꜱᴇɴᴛ ᴛᴏ ᴏᴜʀ **ᴀᴅᴍɪɴ'ꜱ ᴅᴀꜱʜʙᴏᴀʀᴅ** !\nᴘʟᴇᴀꜱᴇ ᴋᴇᴇᴘ ꜱᴏᴍᴇ ᴘᴀᴛɪᴇɴᴄᴇ !\nᴛʜᴇʏ ᴡɪʟʟ ᴜᴘʟᴏᴀᴅ ɪᴛ ᴀꜱ ꜱᴏᴏɴ ᴀꜱ ᴘᴏꜱꜱɪʙʟᴇ.\n\n➟ 📝𝘾𝙤𝙣𝙩𝙚𝙣𝙩 𝙣𝙖𝙢𝙚 : `{search}`\n➟ 👮𝙍𝙚𝙦𝙪𝙚𝙨𝙩𝙚𝙙 𝘽𝙮 : `{message.from_user.first_name}`\n\n༺ @{MAIN_CHANNEL_USRNM} ༻\n\n🦋・‥☆𝘼𝘿𝙈𝙞𝙉 𝙨𝙪𝙥𝙥𝙤𝙧𝙩☆‥・🦋\n╰┈➤・☆ @{ADMIN_USRNM}\n╰┈➤・☆ @LazyDeveloperr",
+                                                                                                       reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("━ • │▌║  ᗩᗪᗪ ʍɛ 2 ᑌᖇ Ǥᖇᗝᑌᑭ  ║▌│ • ━", url=f'http://t.me/{temp.U_NAME}?startgroup=true')],[InlineKeyboardButton("✪ Dev Ch- ✪", url=f"https://t.me/{DEV_CHANNEL_USRNM}"), InlineKeyboardButton("✪ ＹＴ ✪", url=f"https://youtube.com/@{LAZY_YT_HANDLE}"), InlineKeyboardButton("✪ Main Ch- ✪", url=f"https://t.me/{MAIN_CHANNEL_USRNM}")],[InlineKeyboardButton("╚»♥️ Thank You ♥️«╝", callback_data="close_data")]]))
+                await asyncio.sleep(20)
                 await l.delete()    
                 if settings["spell_check"]:
                     return await advantage_spell_chok(msg)
