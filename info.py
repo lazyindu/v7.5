@@ -70,11 +70,10 @@ LAZY_YT_HANDLE = environ.get('ADMIN_REQ_TEMPLATE','LayDeveloperr')  # WITHOUT @ 
 MOVIE_GROUP_ID = int(environ.get('MOVIE_GROUP_ID', -1001883992600))
 
 # Url Shortner
-lazy_groups = environ.get('LAZY_GROUPS','-1001883992600')
-LAZY_GROUPS = [int(lazygroups) for lazygroups in lazy_groups.split()] if lazy_groups else None # ADD GROUP ID IN THIS VARIABLE
 URL_MODE = bool(environ.get("URL_MODE", "True"))
-URL_SHORTENR_WEBSITE = environ.get('URL_SHORTENR_WEBSITE', 'shrinkearn.com')
+URL_SHORTENR_WEBSITE = environ.get('URL_SHORTENR_WEBSITE', 'shrinkearn.com') #Always use website url from api section 
 URL_SHORTNER_WEBSITE_API = environ.get('URL_SHORTNER_WEBSITE_API', '56fe01fe5cae862eab7bf841701e5b964adaf3b4')
+LZURL_PRIME_USERS = [int(lazyurlers) if id_pattern.search(lazyurlers) else lazyurlers for lazyurlers in environ.get('LZURL_PRIME_USERS', '5965340120').split()]
 
 # Auto Delete For Group Message (Self Delete) #
 SELF_DELETE_SECONDS = int(environ.get('SELF_DELETE_SECONDS', 180))

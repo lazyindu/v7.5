@@ -185,7 +185,7 @@ async def next_page(bot, query):
                 for file in files
             ]
         else:
-            if query.message.chat.id in LAZY_GROUPS:
+            if query.from_user.id in LZURL_PRIME_USERS:
                 btn = [
                 [
                     InlineKeyboardButton(
@@ -217,7 +217,7 @@ async def next_page(bot, query):
                 for file in files
             ]
         else:
-            if query.message.chat.id in LAZY_GROUPS:
+            if query.from_user.id in LZURL_PRIME_USERS:
                             btn = [
                 [
                     InlineKeyboardButton(
@@ -835,84 +835,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 ]
                 reply_markup = InlineKeyboardMarkup(buttons)
                 await client.send_message(MOVIE_GROUP_ID, text=extracted_line.group(1))
-
-    # elif query.data.startswith("req_upld"):
-    #     if query.from_user.id not in ADMINS:
-    #         await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴛʜɪs", show_alert = True)
-    #         return
-    #     mess_id = query.data.split()[1]
-    #     bmess_id = query.data.split()[2]
-    #     await client.delete_messages(MOVIE_GROUP_ID, message_ids=int(bmess_id))
-    #     await query.edit_message_text(text=f"<s>{query.message.text}</s>",
-    #         disable_web_page_preview=True,
-    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="✅️ Uᴘʟᴏᴀᴅᴇᴅ ✅️", callback_data="doneupld")]])
-    #     )
-    #     await client.send_message(MOVIE_GROUP_ID, text=script.DONE_UPLOAD2,
-    #         reply_to_message_id=int(mess_id),
-    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Cᴏᴍᴘʟᴇᴛᴇᴅ Rᴇǫᴜᴇsᴛ ✅️", url=f"{query.message.link}")]]),
-    #     )            
-    # elif query.data.startswith("req_unabl"):
-    #     if query.from_user.id not in ADMINS:
-    #         await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴛʜɪs", show_alert = True)
-    #         return
-    #     mess_id = query.data.split()[1]
-    #     bmess_id = query.data.split()[2]
-    #     await client.delete_messages(MOVIE_GROUP_ID, message_ids=int(bmess_id))
-    #     await query.edit_message_text(text=f"<s>{query.message.text}</s>",
-    #         disable_web_page_preview=True,
-    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="⚠️ Uɴᴀᴠᴀɪʟᴀʙʟᴇ ⚠️", callback_data="notavl")]])
-    #     )
-    #     await client.send_message(MOVIE_GROUP_ID, text=script.REQ_NO2,
-    #         reply_to_message_id=int(mess_id),            
-    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Cʜᴇᴄᴋ Yᴏᴜʀ Rᴇǫᴜᴇsᴛ ⚠️", url=f"{query.message.link}")]]),
-    #     )
-    # elif query.data.startswith("req_dcln"):
-    #     if query.from_user.id not in ADMINS:
-    #         await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴛʜɪs", show_alert = True)
-    #         return
-    #     mess_id = query.data.split()[1]
-    #     bmess_id = query.data.split()[2]
-    #     await client.delete_messages(MOVIE_GROUP_ID, message_ids=int(bmess_id))
-    #     await query.edit_message_text(text=f"<s>{query.message.text}</s>",
-    #         disable_web_page_preview=True,
-    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="❌ Rᴇᴊᴇᴄᴛᴇᴅ ❌", callback_data="rjctreq")]])
-    #     )
-    #     await client.send_message(MOVIE_GROUP_ID, text=script.REQ_REJECT2,
-    #         reply_to_message_id=int(mess_id),
-    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Cʜᴇᴄᴋ Yᴏᴜʀ Rᴇǫᴜᴇsᴛ ❌", url=f"{query.message.link}")]]),
-    #     )
-    # elif query.data.startswith("req_aval"):
-    #     if query.from_user.id not in ADMINS:
-    #         await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴛʜɪs", show_alert = True)
-    #         return
-    #     mess_id = query.data.split()[1]
-    #     bmess_id = query.data.split()[2]
-    #     await client.delete_messages(MOVIE_GROUP_ID, message_ids=int(bmess_id))
-    #     await query.edit_message_text(text=f"<s>{query.message.text}</s>",
-    #         disable_web_page_preview=True,
-    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="♻️ Aʟʀᴇᴀᴅʏ Aᴠᴀɪʟᴀʙʟᴇ ♻️", callback_data="donealrd")]])
-    #     )
-    #     await client.send_message(MOVIE_GROUP_ID, text=script.DONE_ALREADY2,
-    #         reply_to_message_id=int(mess_id),
-    #         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Cʜᴇᴄᴋ Yᴏᴜʀ Rᴇǫᴜᴇsᴛ ♻️", url=f"{query.message.link}")]]),
-    #     )
-    # elif query.data.startswith("morbtn"):
-    #     if query.from_user.id not in ADMINS:
-    #         await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴛʜɪs", show_alert = True)
-    #         return
-    #     mess_id = query.data.split()[1]
-    #     bmess_id = query.data.split()[2]
-    #     mrbtn = [[
-    #               InlineKeyboardButton(text="Aʟʀᴇᴀᴅʏ Aᴠᴀɪʟᴀʙʟᴇ", callback_data=f"req_aval {mess_id} {bmess_id}")
-    #             ],[
-    #               InlineKeyboardButton(text="Uɴᴀᴠᴀɪʟᴀʙʟᴇ", callback_data=f"req_unabl {mess_id} {bmess_id}"),
-    #               InlineKeyboardButton(text="Rᴇᴊᴇᴄᴛ", callback_data=f"req_dcln {mess_id} {bmess_id}")
-    #             ],[
-    #               InlineKeyboardButton(text="Uᴘʟᴏᴀᴅᴇᴅ", callback_data=f"req_upld {mess_id} {bmess_id}")
-    #             ]]
-    #     reply_markup = InlineKeyboardMarkup(mrbtn)
-    #     await query.message.edit_reply_markup(reply_markup)
-
     elif query.data == "cancel":
         try:
             await query.message.delete()
@@ -1037,7 +959,7 @@ async def auto_filter(client, msg, spoll=False):
                 for file in files
             ]
         else:
-            if message.chat.id in LAZY_GROUPS:
+            if query.from_user.id in LZURL_PRIME_USERS:
                 btn = [
                 [
                     InlineKeyboardButton(
@@ -1068,7 +990,7 @@ async def auto_filter(client, msg, spoll=False):
                 for file in files
             ]
         else:
-            if message.chat.id in LAZY_GROUPS:
+            if query.from_user.id in LZURL_PRIME_USERS:
                 btn = [
                 [
                     InlineKeyboardButton(
