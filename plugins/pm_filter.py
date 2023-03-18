@@ -200,7 +200,7 @@ async def next_page(bot, query):
             # create a new entry for the user in the download counts dictionary
             download_counts[query.from_user.id] = {'date': current_date, 'count': 1}
 
-        if URL_MODE == False or download_counts[query.from_user.id]['count'] > DOWNLOAD_LIMIT:
+        if URL_MODE == False:
             btn = [
                 [
                     InlineKeyboardButton(
@@ -228,7 +228,7 @@ async def next_page(bot, query):
                 ]
 
     else:
-        if URL_MODE == False or download_counts[query.from_user.id]['count'] > DOWNLOAD_LIMIT:
+        if URL_MODE == False:
             btn = [
                 [
                     InlineKeyboardButton(
@@ -1027,7 +1027,16 @@ async def auto_filter(client, msg, spoll=False):
                 for file in files
             ]
         else:
-            if message.from_user.id in LZURL_PRIME_USERS:
+            if message.from_user.id in ADMINS:
+                btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
+                    ),
+                ]
+                for file in files
+                ]
+            elif message.from_user.id in LZURL_PRIME_USERS:
                 btn = [
                 [
                     InlineKeyboardButton(
@@ -1072,7 +1081,20 @@ async def auto_filter(client, msg, spoll=False):
                 for file in files
             ]
         else:
-            if message.from_user.id in LZURL_PRIME_USERS:
+            if message.from_user.id in ADMINS:
+                btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
+                    ),
+                    InlineKeyboardButton(
+                        text=f"{get_size(file.file_size)}",
+                        callback_data=f'files#{file.file_id}',
+                    ),
+                ]
+                for file in files
+                ]
+            elif message.from_user.id in LZURL_PRIME_USERS:
                 btn = [
                 [
                     InlineKeyboardButton(
@@ -1101,7 +1123,7 @@ async def auto_filter(client, msg, spoll=False):
                 ]
     btn.insert(0,
         [ 
-	    InlineKeyboardButton(text="⚡ʜᴏᴡ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ⚡", url='https://telegram.me/LazyDeveloper')
+	    InlineKeyboardButton(text="⚡ʜᴏᴡ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ⚡", url='https://telegram.me/LazyDeveloper'),InlineKeyboardButton(text="⚡ʜᴏᴡ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ⚡", url='https://telegram.me/LazyDeveloper')
         ] 
     )
     if offset != "":
