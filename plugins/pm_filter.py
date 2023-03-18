@@ -192,7 +192,7 @@ async def next_page(bot, query):
         if query.from_user.id in download_counts and download_counts[query.from_user.id]['date'] == current_date:
             if download_counts[query.from_user.id]['count'] >= DOWNLOAD_LIMIT:
                 # set URL_MODE to False to disable the URL shortener button
-                URL_MODE = True
+                URL_MODE = False
             else:
                 # increment the download count for the user
                 download_counts[query.from_user.id]['count'] += 1
