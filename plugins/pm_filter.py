@@ -309,7 +309,6 @@ async def advantage_spoll_choker(bot, query):
 # Born to make history @LazyDeveloper !
 @Client.on_callback_query()
 async def cb_handler(client: Client, query: CallbackQuery):
-    search = query.message.text
     if query.data == "close_data":
         await query.message.delete()
     elif query.data == "delallconfirm":
@@ -816,25 +815,23 @@ async def cb_handler(client: Client, query: CallbackQuery):
             parse_mode=enums.ParseMode.HTML
         )
     elif query.data == "exit":
-        if query.from_user.id not in ADMINS:
-            await query.answer("ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ʀɪɢʜᴛs ᴛᴏ ᴄʟᴏsᴇ ᴛʜɪs.", show_alert = True)
-            return
-        await query.message.delete()
-    elif query.data == "already_uploaded":
-        if query.from_user.id not in ADMINS:
-            await query.answer("Sorry Darling! You can't make any changes...")
-            return
-        else:
-            message = message.text
-            chat_id = message.chat_id
-            extracted_line = re.search(pattern, message, re.MULTILINE)
-            if extracted_line:
-              # Send the extracted line to the other group chat
-                buttons = [
-                [ InlineKeyboardButton("⨳ ok ⨳", callback_data="exit") ]
-                ]
-                reply_markup = InlineKeyboardMarkup(buttons)
-                await client.send_message(MOVIE_GROUP_ID, text=extracted_line.group(1))
+        await query.answer("Sorry Darling! You can't make any changes...\n\nOnly my Admin can change this setting...", show_alert = True)
+        return
+    # elif query.data == "already_uploaded":
+    #     if query.from_user.id not in ADMINS:
+    #         await query.answer("Sorry Darling! You can't make any changes...\n\nOnly my Admin can change this setting...", show_alert = True)
+    #         return
+    #     else:
+    #         message = message.text
+    #         chat_id = message.chat_id
+    #         extracted_line = re.search(pattern, message, re.MULTILINE)
+    #         if extracted_line:
+    #           # Send the extracted line to the other group chat
+    #             buttons = [
+    #             [ InlineKeyboardButton("⨳ ok ⨳", callback_data="cancel") ]
+    #             ]
+    #             reply_markup = InlineKeyboardMarkup(buttons)
+    #             await client.send_message(MOVIE_GROUP_ID, text=extracted_line.group(1))
     elif query.data == "cancel":
         try:
             await query.message.delete()
@@ -875,7 +872,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
         settings = await get_settings(grpid)
 
         if settings is not None:
-            buttons = [
+            if message.from_user.id in ADMINS:
+                buttons = [
                 [
                     InlineKeyboardButton('Filter Button',
                                          callback_data=f'setgs#button#{settings["button"]}#{str(grp_id)}'),
@@ -887,12 +885,48 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     InlineKeyboardButton('✅ Yes' if settings["botpm"] else '❌ No',
                                          callback_data=f'setgs#botpm#{settings["botpm"]}#{str(grp_id)}')
                 ],
-                # [
-                #     InlineKeyboardButton('File Secure',
-                #                          callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}'),
-                #     InlineKeyboardButton('✅ Yes' if settings["file_secure"] else '❌ No',
-                #                          callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}')
-                # ],
+                [
+                    InlineKeyboardButton('File Secure',
+                                         callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}'),
+                    InlineKeyboardButton('✅ Yes' if settings["file_secure"] else '❌ No',
+                                         callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}')
+                ],
+                [
+                    InlineKeyboardButton('IMDB', callback_data=f'setgs#imdb#{settings["imdb"]}#{str(grp_id)}'),
+                    InlineKeyboardButton('✅ Yes' if settings["imdb"] else '❌ No',
+                                         callback_data=f'setgs#imdb#{settings["imdb"]}#{str(grp_id)}')
+                ],
+                [
+                    InlineKeyboardButton('Spell Check',
+                                         callback_data=f'setgs#spell_check#{settings["spell_check"]}#{str(grp_id)}'),
+                    InlineKeyboardButton('✅ Yes' if settings["spell_check"] else '❌ No',
+                                         callback_data=f'setgs#spell_check#{settings["spell_check"]}#{str(grp_id)}')
+                ],
+                [
+                    InlineKeyboardButton('Welcome', callback_data=f'setgs#welcome#{settings["welcome"]}#{str(grp_id)}'),
+                    InlineKeyboardButton('✅ Yes' if settings["welcome"] else '❌ No',
+                                         callback_data=f'setgs#welcome#{settings["welcome"]}#{str(grp_id)}')
+                ]
+            ]
+            else:
+                buttons = [
+                [
+                    InlineKeyboardButton('Filter Button',
+                                         callback_data=f'setgs#button#{settings["button"]}#{str(grp_id)}'),
+                    InlineKeyboardButton('Single' if settings["button"] else 'Double',
+                                         callback_data=f'setgs#button#{settings["button"]}#{str(grp_id)}')
+                ],
+                [
+                    InlineKeyboardButton('Bot PM', callback_data=f'setgs#botpm#{settings["botpm"]}#{str(grp_id)}'),
+                    InlineKeyboardButton('✅ Yes' if settings["botpm"] else '❌ No',
+                                         callback_data=f'setgs#botpm#{settings["botpm"]}#{str(grp_id)}')
+                ],
+                [
+                    InlineKeyboardButton('File Secure',
+                                         callback_data=f'exit'),
+                    InlineKeyboardButton('✅ Yes' if settings["file_secure"] else '❌ No',
+                                         callback_data=f'exit')
+                ],
                 [
                     InlineKeyboardButton('IMDB', callback_data=f'setgs#imdb#{settings["imdb"]}#{str(grp_id)}'),
                     InlineKeyboardButton('✅ Yes' if settings["imdb"] else '❌ No',
@@ -950,7 +984,17 @@ async def auto_filter(client, msg, spoll=False):
     pre = 'filep' if settings['file_secure'] else 'file'
     if settings["button"]:
         if URL_MODE == False:
-            btn = [
+            if message.from_user.id in ADMINS:
+                btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
+                    ),
+                ]
+                for file in files
+            ]
+            else:
+                btn = [
                 [
                     InlineKeyboardButton(
                         text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}'
@@ -959,7 +1003,7 @@ async def auto_filter(client, msg, spoll=False):
                 for file in files
             ]
         else:
-            if query.from_user.id in LZURL_PRIME_USERS:
+            if message.from_user.id in LZURL_PRIME_USERS:
                 btn = [
                 [
                     InlineKeyboardButton(
@@ -977,7 +1021,21 @@ async def auto_filter(client, msg, spoll=False):
                 ]
     else:
         if URL_MODE == False:
-            btn = [
+            if message.from_user.id in ADMINS:
+                btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
+                    ),
+                    InlineKeyboardButton(
+                        text=f"{get_size(file.file_size)}",
+                        callback_data=f'{pre}#{file.file_id}',
+                    ),
+                ]
+                for file in files
+            ]
+            else:
+                btn = [
                 [
                     InlineKeyboardButton(
                         text=f"{file.file_name}", callback_data=f'{pre}#{file.file_id}'
@@ -990,7 +1048,7 @@ async def auto_filter(client, msg, spoll=False):
                 for file in files
             ]
         else:
-            if query.from_user.id in LZURL_PRIME_USERS:
+            if message.from_user.id in LZURL_PRIME_USERS:
                 btn = [
                 [
                     InlineKeyboardButton(

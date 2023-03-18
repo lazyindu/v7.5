@@ -417,7 +417,8 @@ async def settings(client, message):
     settings = await get_settings(grp_id)
 
     if settings is not None:
-        buttons = [
+        if message.from_user.id in ADMINS:
+            buttons = [
             [
                 InlineKeyboardButton(
                     'Filter Button',
@@ -438,16 +439,79 @@ async def settings(client, message):
                     callback_data=f'setgs#botpm#{settings["botpm"]}#{grp_id}',
                 ),
             ],
-            # [
-            #     InlineKeyboardButton(
-            #         'File Secure',
-            #         callback_data=f'setgs#file_secure#{settings["file_secure"]}#{grp_id}',
-            #     ),
-            #     InlineKeyboardButton(
-            #         '✅ Yes' if settings["file_secure"] else '❌ No',
-            #         callback_data=f'setgs#file_secure#{settings["file_secure"]}#{grp_id}',
-            #     ),
-            # ],
+            [
+                InlineKeyboardButton(
+                    'File Secure',
+                    callback_data=f'setgs#file_secure#{settings["file_secure"]}#{grp_id}',
+                ),
+                InlineKeyboardButton(
+                    '✅ Yes' if settings["file_secure"] else '❌ No',
+                    callback_data=f'setgs#file_secure#{settings["file_secure"]}#{grp_id}',
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    'IMDB',
+                    callback_data=f'setgs#imdb#{settings["imdb"]}#{grp_id}',
+                ),
+                InlineKeyboardButton(
+                    '✅ Yes' if settings["imdb"] else '❌ No',
+                    callback_data=f'setgs#imdb#{settings["imdb"]}#{grp_id}',
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    'Spell Check',
+                    callback_data=f'setgs#spell_check#{settings["spell_check"]}#{grp_id}',
+                ),
+                InlineKeyboardButton(
+                    '✅ Yes' if settings["spell_check"] else '❌ No',
+                    callback_data=f'setgs#spell_check#{settings["spell_check"]}#{grp_id}',
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    'Welcome',
+                    callback_data=f'setgs#welcome#{settings["welcome"]}#{grp_id}',
+                ),
+                InlineKeyboardButton(
+                    '✅ Yes' if settings["welcome"] else '❌ No',
+                    callback_data=f'setgs#welcome#{settings["welcome"]}#{grp_id}',
+                ),
+            ],
+        ]
+        else:
+            buttons = [
+            [
+                InlineKeyboardButton(
+                    'Filter Button',
+                    callback_data=f'setgs#button#{settings["button"]}#{grp_id}',
+                ),
+                InlineKeyboardButton(
+                    'Single' if settings["button"] else 'Double',
+                    callback_data=f'setgs#button#{settings["button"]}#{grp_id}',
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    'Bot PM',
+                    callback_data=f'setgs#botpm#{settings["botpm"]}#{grp_id}',
+                ),
+                InlineKeyboardButton(
+                    '✅ Yes' if settings["botpm"] else '❌ No',
+                    callback_data=f'setgs#botpm#{settings["botpm"]}#{grp_id}',
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    'File Secure',
+                    callback_data=f'exit',
+                ),
+                InlineKeyboardButton(
+                    '✅ Yes' if settings["file_secure"] else '❌ No',
+                    callback_data=f'exit',
+                ),
+            ],
             [
                 InlineKeyboardButton(
                     'IMDB',
