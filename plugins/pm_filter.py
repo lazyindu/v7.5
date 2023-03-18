@@ -30,15 +30,8 @@ from database.filters_mdb import (
     find_filter,
     get_filters,
 )
-from datetime import datetime, timedelta
+import datetime
 # set the limit for number of downloads per user per day
-DOWNLOAD_LIMIT = 10
-
-# create a dictionary to store the download counts for each user
-download_counts = {}
-
-# get the current date
-current_date = datetime.date.today()
 
 
 # Create dictionary to keep track of user accesses
@@ -165,6 +158,15 @@ async def doc(bot, update):
 # # Born to make history @LazyDeveloper !
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
+    DOWNLOAD_LIMIT = 10
+
+# create a dictionary to store the download counts for each user
+    download_counts = {}
+
+# get the current date
+    # current_date = datetime.date.today()
+    current_date = datetime.datetime.today().strftime("%Y-%m-%d")
+
     ident, req, key, offset = query.data.split("_")
     if int(req) not in [query.from_user.id, 0]:
         return await query.answer("This Message is not for you dear. Don't worry you can send new one !", show_alert=True)
