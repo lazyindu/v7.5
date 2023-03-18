@@ -30,6 +30,20 @@ from database.filters_mdb import (
     find_filter,
     get_filters,
 )
+from datetime import datetime, timedelta
+# set the limit for number of downloads per user per day
+DOWNLOAD_LIMIT = 10
+
+# create a dictionary to store the download counts for each user
+download_counts = {}
+
+# get the current date
+current_date = datetime.date.today()
+
+
+# Create dictionary to keep track of user accesses
+user_accesses = {}
+
 req_channel = REQ_CHANNEL
 
 import logging
@@ -40,7 +54,6 @@ logger.setLevel(logging.ERROR)
 BUTTONS = {}
 SPELL_CHECK = {}
 
-pattern = r'^➟ 📝𝘾𝙤𝙣𝙩𝙚𝙣𝙩 𝙣𝙖𝙢𝙚 : (.*)$'
 
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
@@ -149,8 +162,7 @@ async def doc(bot, update):
     if ph_path:
        os.remove(ph_path) 
 
-
-# Born to make history @LazyDeveloper !
+# # Born to make history @LazyDeveloper !
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
@@ -175,7 +187,18 @@ async def next_page(bot, query):
         return
     settings = await get_settings(query.message.chat.id)
     if settings['button']:
-        if URL_MODE == False:
+        if query.from_user.id in download_counts and download_counts[query.from_user.id]['date'] == current_date:
+            if download_counts[query.from_user.id]['count'] >= DOWNLOAD_LIMIT:
+                # set URL_MODE to False to disable the URL shortener button
+                URL_MODE = True
+            else:
+                # increment the download count for the user
+                download_counts[query.from_user.id]['count'] += 1
+        else:
+            # create a new entry for the user in the download counts dictionary
+            download_counts[query.from_user.id] = {'date': current_date, 'count': 1}
+
+        if URL_MODE == False or download_counts[query.from_user.id]['count'] > DOWNLOAD_LIMIT:
             btn = [
                 [
                     InlineKeyboardButton(
@@ -203,7 +226,7 @@ async def next_page(bot, query):
                 ]
 
     else:
-        if URL_MODE == False:
+        if URL_MODE == False or download_counts[query.from_user.id]['count'] > DOWNLOAD_LIMIT:
             btn = [
                 [
                     InlineKeyboardButton(
