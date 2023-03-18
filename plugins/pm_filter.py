@@ -189,16 +189,16 @@ async def next_page(bot, query):
         return
     settings = await get_settings(query.message.chat.id)
     if settings['button']:
-        if query.from_user.id in download_counts and download_counts[query.from_user.id]['date'] == current_date:
-            if download_counts[query.from_user.id]['count'] >= DOWNLOAD_LIMIT:
-                # set URL_MODE to False to disable the URL shortener button
-                URL_MODE = False
-            else:
-                # increment the download count for the user
-                download_counts[query.from_user.id]['count'] += 1
-        else:
-            # create a new entry for the user in the download counts dictionary
-            download_counts[query.from_user.id] = {'date': current_date, 'count': 1}
+        # if query.from_user.id in download_counts and download_counts[query.from_user.id]['date'] == current_date:
+        #     if download_counts[query.from_user.id]['count'] >= DOWNLOAD_LIMIT:
+        #         # set URL_MODE to False to disable the URL shortener button
+        #         URL_MODE = False
+        #     else:
+        #         # increment the download count for the user
+        #         download_counts[query.from_user.id]['count'] += 1
+        # else:
+        #     # create a new entry for the user in the download counts dictionary
+        #     download_counts[query.from_user.id] = {'date': current_date, 'count': 1}
 
         if URL_MODE == False:
             btn = [
