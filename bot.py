@@ -7,6 +7,9 @@ logging.getLogger().setLevel(logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 logging.getLogger("imdbpy").setLevel(logging.ERROR)
 
+import openai
+openai.api_key = "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"
+
 from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
 from database.ia_filterdb import Media
@@ -84,6 +87,7 @@ class Bot(Client):
                 for message in app.iter_messages("pyrogram", 1, 15000):
                     print(message.text)
         """
+
         current = offset
         while True:
             new_diff = min(200, limit - current)
@@ -94,6 +98,17 @@ class Bot(Client):
                 yield message
                 current += 1
 
+    async def ask_gpt(self, prompt: str) -> str:
+        response = await openai.Completion.create(
+            engine="text-davinci-004",
+            prompt=prompt,
+            max_tokens=1024,
+            n=1,
+            stop=None,
+            temperature=0.7,
+        )
+        message = response.choices[0].text.strip()
+        return message
 
 app = Bot()
 app.run()
