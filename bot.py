@@ -20,7 +20,7 @@ from plugins import web_server
 from pyrogram.errors.exceptions.bad_request_400 import BadRequest
 
 import openai
-
+PORT = "8080"
 openai.api_key = "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"
 
 class Bot(Client):
