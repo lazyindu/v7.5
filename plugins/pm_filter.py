@@ -996,7 +996,7 @@ async def auto_filter(client, msg, spoll=False):
         search, files, offset, total_results = spoll
     pre = 'filep' if settings['file_secure'] else 'file'
     if settings["button"]:
-        if URL_MODE :
+        if URL_MODE == True:
             if message.from_user.id in ADMINS:
                 btn = [
                 [
@@ -1023,27 +1023,28 @@ async def auto_filter(client, msg, spoll=False):
                 for file in files
                 ]
         else:
-            if message.from_user.id in ADMINS:
-                btn = [
-                [
-                    InlineKeyboardButton(
-                        text=f"|{get_size(file.file_size)}| {file.file_name}", callback_data=f'files#{file.file_id}'
-                    ),
+            if URL_MODE == False:
+                if message.from_user.id in ADMINS:
+                    btn = [
+                    [
+                        InlineKeyboardButton(
+                            text=f"|{get_size(file.file_size)}| {file.file_name}", callback_data=f'files#{file.file_id}'
+                        ),
+                    ]
+                    for file in files
                 ]
-                for file in files
-            ]
-            else:
-                btn = [
-                [
-                    InlineKeyboardButton(
-                        text=f"|{get_size(file.file_size)}| {file.file_name}", callback_data=f'{pre}#{file.file_id}'
-                    ),
+                else:
+                    btn = [
+                    [
+                        InlineKeyboardButton(
+                            text=f"|{get_size(file.file_size)}| {file.file_name}", callback_data=f'{pre}#{file.file_id}'
+                        ),
+                    ]
+                    for file in files
                 ]
-                for file in files
-            ]
 
     else:
-        if URL_MODE:
+        if URL_MODE == True:
             if message.from_user.id in ADMINS:
                 btn = [
                 [
@@ -1085,32 +1086,33 @@ async def auto_filter(client, msg, spoll=False):
                 for file in files
                 ]
         else:
-            if message.from_user.id in ADMINS:
-                btn = [
-                [
-                    InlineKeyboardButton(
-                        text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
-                    ),
-                    InlineKeyboardButton(
-                        text=f"{get_size(file.file_size)}",
-                        callback_data=f'files#{file.file_id}',
-                    ),
+            if URL_MODE == False:
+                if message.from_user.id in ADMINS:
+                    btn = [
+                    [
+                        InlineKeyboardButton(
+                            text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
+                        ),
+                        InlineKeyboardButton(
+                            text=f"{get_size(file.file_size)}",
+                            callback_data=f'files#{file.file_id}',
+                        ),
+                    ]
+                    for file in files
                 ]
-                for file in files
-            ]
-            else:
-                btn = [
-                [
-                    InlineKeyboardButton(
-                        text=f"|{file.file_name}|", callback_data=f'{pre}#{file.file_id}'
-                    ),
-                    InlineKeyboardButton(
-                        text=f"{get_size(file.file_size)}",
-                        callback_data=f'{pre}#{file.file_id}',
-                    ),
+                else:
+                    btn = [
+                    [
+                        InlineKeyboardButton(
+                            text=f"|{file.file_name}|", callback_data=f'{pre}#{file.file_id}'
+                        ),
+                        InlineKeyboardButton(
+                            text=f"{get_size(file.file_size)}",
+                            callback_data=f'{pre}#{file.file_id}',
+                        ),
+                    ]
+                    for file in files
                 ]
-                for file in files
-            ]
     btn.insert(0,
         [ 
 	    InlineKeyboardButton(text="⚡ʜᴏᴡ 2 ᴅᴏᴡɴʟᴏᴀᴅ⚡", url='https://telegram.me/LazyDeveloper'),
