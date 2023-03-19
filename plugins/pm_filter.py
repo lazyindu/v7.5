@@ -178,7 +178,6 @@ async def next_page(bot, query):
     if not files:
         return
     settings = await get_settings(query.message.chat.id)
-    if settings['button']:
         # if query.from_user.id in download_counts and download_counts[query.from_user.id]['date'] == current_date:
         #     if download_counts[query.from_user.id]['count'] >= DOWNLOAD_LIMIT:
         #         # set URL_MODE to False to disable the URL shortener button
@@ -189,24 +188,8 @@ async def next_page(bot, query):
         # else:
         #     # create a new entry for the user in the download counts dictionary
         #     download_counts[query.from_user.id] = {'date': current_date, 'count': 1}d
-        if URL_MODE:
-            if query.from_user.id in LZURL_PRIME_USERS:
-                btn = [
-                [
-                    InlineKeyboardButton(
-                        text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
-                    ),
-                ]
-                for file in files
-                ]
-            else:
-                btn = [
-                [
-                    InlineKeyboardButton(text=f"[{get_size(file.file_size)}] {file.file_name}", url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}")),
-                ]
-                for file in files
-                ]
-        else:
+    if settings['button']:
+        if URL_MODE == False:
             btn = [
                 [
                     InlineKeyboardButton(
@@ -215,36 +198,16 @@ async def next_page(bot, query):
                 ]
                 for file in files
             ]
-    else:
-        if URL_MODE:
-            if query.from_user.id in LZURL_PRIME_USERS:
-                            btn = [
-                [
-                    InlineKeyboardButton(
-                        text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
-                    ),
-                    InlineKeyboardButton(
-                        text=f"{get_size(file.file_size)}",
-                        callback_data=f'files_#{file.file_id}',
-                    ),
-                ]
-                for file in files
-                ]
-            else:
-                btn = [
-                [
-                    InlineKeyboardButton(
-                        text=f"[{get_size(file.file_size)}] {file.file_name}", 
-                        url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}")
-                    ),
-                    InlineKeyboardButton(
-                        text=f"[{get_size(file.file_size)}] {file.file_name}", 
-                        url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}")
-                    ),
-                ]
-                for file in files
-                ]
         else:
+            btn = [
+                [
+                    InlineKeyboardButton(text=f"[{get_size(file.file_size)}] {file.file_name}", url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")),
+                ]
+                for file in files
+            ]
+
+    else:
+        if URL_MODE == False:
             btn = [
                 [
                     InlineKeyboardButton(
@@ -253,6 +216,20 @@ async def next_page(bot, query):
                     InlineKeyboardButton(
                         text=f"{get_size(file.file_size)}",
                         callback_data=f'files_#{file.file_id}',
+                    ),
+                ]
+                for file in files
+            ]
+        else:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", 
+                        url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
+                    ),
+                    InlineKeyboardButton(
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", 
+                        url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
                     ),
                 ]
                 for file in files
@@ -996,73 +973,32 @@ async def auto_filter(client, msg, spoll=False):
         search, files, offset, total_results = spoll
     pre = 'filep' if settings['file_secure'] else 'file'
     if settings["button"]:
-        if URL_MODE == True:
-            if message.from_user.id in ADMINS:
+            if URL_MODE == False:
                 btn = [
-                [
-                    InlineKeyboardButton(
-                        text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
-                    ),
-                ]
-                for file in files
-                ]
-            elif message.from_user.id in LZURL_PRIME_USERS:
-                btn = [
-                [
-                    InlineKeyboardButton(
-                        text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}'
-                    ),
-                ]
-                for file in files
+                    [
+                        InlineKeyboardButton(
+                            text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}'
+                        ),
+                    ]
+                    for file in files
                 ]
             else:
-                btn = [
-                [
-                    InlineKeyboardButton(text=f"[{get_size(file.file_size)}] {file.file_name}", url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}")),
-                ]
-                for file in files
-                ]
-        else:
-            if URL_MODE == False:
-                if message.from_user.id in ADMINS:
-                    btn = [
+                btn = [{pre}
                     [
                         InlineKeyboardButton(
-                            text=f"|{get_size(file.file_size)}| {file.file_name}", callback_data=f'files#{file.file_id}'
+                            text=f"[{get_size(file.file_size)}] {file.file_name}", 
+                            url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
                         ),
                     ]
                     for file in files
                 ]
-                else:
-                    btn = [
-                    [
-                        InlineKeyboardButton(
-                            text=f"|{get_size(file.file_size)}| {file.file_name}", callback_data=f'{pre}#{file.file_id}'
-                        ),
-                    ]
-                    for file in files
-                ]
-
     else:
-        if URL_MODE == True:
-            if message.from_user.id in ADMINS:
-                btn = [
+        if URL_MODE == False:
+            btn = [
                 [
                     InlineKeyboardButton(
-                        text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
-                    ),
-                    InlineKeyboardButton(
-                        text=f"{get_size(file.file_size)}",
-                        callback_data=f'files#{file.file_id}',
-                    ),
-                ]
-                for file in files
-                ]
-            elif message.from_user.id in LZURL_PRIME_USERS:
-                btn = [
-                [
-                    InlineKeyboardButton(
-                        text=f"{file.file_name}", callback_data=f'{pre}#{file.file_id}'
+                        text=f"{file.file_name}",
+                        callback_data=f'{pre}#{file.file_id}',
                     ),
                     InlineKeyboardButton(
                         text=f"{get_size(file.file_size)}",
@@ -1070,49 +1006,22 @@ async def auto_filter(client, msg, spoll=False):
                     ),
                 ]
                 for file in files
-                ]
-            else:
-                btn = [
+            ]
+        else:
+            btn = [
                 [
                     InlineKeyboardButton(
-                        text=f"{file.file_name}", 
-                        url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}")
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", 
+                        url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
                     ),
                     InlineKeyboardButton(
-                        text=f"[{get_size(file.file_size)}]", 
-                        url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}")
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", 
+                        url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
                     ),
                 ]
                 for file in files
-                ]
-        else:
-            if URL_MODE == False:
-                if message.from_user.id in ADMINS:
-                    btn = [
-                    [
-                        InlineKeyboardButton(
-                            text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
-                        ),
-                        InlineKeyboardButton(
-                            text=f"{get_size(file.file_size)}",
-                            callback_data=f'files#{file.file_id}',
-                        ),
-                    ]
-                    for file in files
-                ]
-                else:
-                    btn = [
-                    [
-                        InlineKeyboardButton(
-                            text=f"|{file.file_name}|", callback_data=f'{pre}#{file.file_id}'
-                        ),
-                        InlineKeyboardButton(
-                            text=f"{get_size(file.file_size)}",
-                            callback_data=f'{pre}#{file.file_id}',
-                        ),
-                    ]
-                    for file in files
-                ]
+            ]
+
     btn.insert(0,
         [ 
 	    InlineKeyboardButton(text="⚡ʜᴏᴡ 2 ᴅᴏᴡɴʟᴏᴀᴅ⚡", url='https://telegram.me/LazyDeveloper'),
