@@ -70,7 +70,7 @@ LAZY_YT_HANDLE = environ.get('ADMIN_REQ_TEMPLATE','LayDeveloperr')  # WITHOUT @ 
 MOVIE_GROUP_ID = int(environ.get('MOVIE_GROUP_ID', -1001883992600))
 
 # Url Shortner
-URL_MODE = is_enabled((environ.get("URL_MODE","True")),False)
+URL_MODE = is_enabled((environ.get("URL_MODE","True")), False)
 URL_SHORTENR_WEBSITE = environ.get('URL_SHORTENR_WEBSITE', 'shrinkearn.com') #Always use website url from api section 
 URL_SHORTNER_WEBSITE_API = environ.get('URL_SHORTNER_WEBSITE_API', '56fe01fe5cae862eab7bf841701e5b964adaf3b4')
 LZURL_PRIME_USERS = [int(lazyurlers) if id_pattern.search(lazyurlers) else lazyurlers for lazyurlers in environ.get('LZURL_PRIME_USERS', '5965340120').split()]
