@@ -188,18 +188,8 @@ async def next_page(bot, query):
         #         download_counts[query.from_user.id]['count'] += 1
         # else:
         #     # create a new entry for the user in the download counts dictionary
-        #     download_counts[query.from_user.id] = {'date': current_date, 'count': 1}
-
+        #     download_counts[query.from_user.id] = {'date': current_date, 'count': 1}d
         if URL_MODE:
-            btn = [
-                [
-                    InlineKeyboardButton(
-                        text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
-                    ),
-                ]
-                for file in files
-            ]
-        else:
             if query.from_user.id in LZURL_PRIME_USERS:
                 btn = [
                 [
@@ -216,22 +206,17 @@ async def next_page(bot, query):
                 ]
                 for file in files
                 ]
-
-    else:
-        if URL_MODE:
+        else:
             btn = [
                 [
                     InlineKeyboardButton(
-                        text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
-                    ),
-                    InlineKeyboardButton(
-                        text=f"{get_size(file.file_size)}",
-                        callback_data=f'files_#{file.file_id}',
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
                     ),
                 ]
                 for file in files
             ]
-        else:
+    else:
+        if URL_MODE:
             if query.from_user.id in LZURL_PRIME_USERS:
                             btn = [
                 [
@@ -259,6 +244,20 @@ async def next_page(bot, query):
                 ]
                 for file in files
                 ]
+        else:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
+                    ),
+                    InlineKeyboardButton(
+                        text=f"{get_size(file.file_size)}",
+                        callback_data=f'files_#{file.file_id}',
+                    ),
+                ]
+                for file in files
+            ]
+
     btn.insert(0,
         [ 
 	    InlineKeyboardButton(text="⚡ʜᴏᴡ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ⚡", url='https://telegram.me/LazyDeveloper')
