@@ -16,4 +16,4 @@ aiofiles
 dnspython
 pynewtonmath
 openai
-aiogram
+python-telegram-bot
