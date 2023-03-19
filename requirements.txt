@@ -17,3 +17,4 @@ dnspython
 pynewtonmath
 openai
 python-telegram-bot
+aiogram
