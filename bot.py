@@ -9,6 +9,7 @@ logging.getLogger("imdbpy").setLevel(logging.ERROR)
 
 import openai
 openai.api_key = "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"
+from aiogram import Bot, Dispatcher, executor, types
 
 from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
@@ -97,18 +98,20 @@ class Bot(Client):
             for message in messages:
                 yield message
                 current += 1
-
-    async def ask_gpt(self, prompt: str) -> str:
+                
+    @dp.message_handler()
+    async def ask_gpt(message: types.Message):
         response = await openai.Completion.create(
-            engine="text-davinci-004",
-            prompt=prompt,
+            model="text-davinci-004",
+            prompt=message.txt,
             max_tokens=1024,
-            n=1,
-            stop=None,
+            top_p=1,
+            frequency_penalty=0.2,
             temperature=0.7,
         )
-        message = response.choices[0].text.strip()
-        return message
+        await message.reply(response.choices [0].text)
 
-app = Bot()
-app.run()
+if __name__ == "__main__":
+    executor.start_polling(dp)
+    app = Bot()
+    app.run()
