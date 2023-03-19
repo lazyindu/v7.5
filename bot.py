@@ -7,9 +7,6 @@ logging.getLogger().setLevel(logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 logging.getLogger("imdbpy").setLevel(logging.ERROR)
 
-import openai
-from aiogram import Bot, Dispatcher, executor, types
-
 from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
 from database.ia_filterdb import Media
@@ -22,8 +19,6 @@ from aiohttp import web
 from plugins import web_server
 
 PORT = "8080"
-
-openai.api_key = "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" # Replace with your OpenAI API key
 
 class Bot(Client):
 
@@ -59,7 +54,7 @@ class Bot(Client):
     async def stop(self, *args):
         await super().stop()
         logging.info("Bot stopped. Bye.")
-        
+    
     async def iter_messages(
         self,
         chat_id: Union[int, str],
@@ -98,28 +93,7 @@ class Bot(Client):
             for message in messages:
                 yield message
                 current += 1
-    
 
-@dp.message_handler()
-async def ask_gpt(message: types.Message):
-    response = await openai.Completion.create(
-        model="text-davinci-004",
-        prompt=message.text,
-        max_tokens=1024,
-        top_p=1,
-        frequency_penalty=0.2,
-        presence_penalty=0.0,
-        temperature=0.7,
-    )
-    await message.reply(response.choices[0].text)
 
-if __name__ == "__main__":
-    # Initialize the bot and dispatcher instances
-    bot = Bot()
-    dp = Dispatcher(bot)
-
-    # Start the polling
-    executor.start_polling(dp)
-
-    # Start the Pyrogram client
-    bot.run()
+app = Bot()
+app.run()
