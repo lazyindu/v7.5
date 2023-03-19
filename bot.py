@@ -21,7 +21,7 @@ from pyrogram.errors.exceptions.bad_request_400 import BadRequest
 
 import openai
 
-openai.api_key = "YOUR_API_KEY_HERE"
+openai.api_key = "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"
 
 class Bot(Client):
 
