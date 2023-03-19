@@ -17,8 +17,11 @@ from typing import Union, Optional, AsyncGenerator
 from pyrogram import types
 from aiohttp import web
 from plugins import web_server
+from pyrogram.errors.exceptions.bad_request_400 import BadRequest
 
-PORT = "8080"
+import openai
+
+openai.api_key = "YOUR_API_KEY_HERE"
 
 class Bot(Client):
 
@@ -54,7 +57,7 @@ class Bot(Client):
     async def stop(self, *args):
         await super().stop()
         logging.info("Bot stopped. Bye.")
-    
+
     async def iter_messages(
         self,
         chat_id: Union[int, str],
@@ -84,6 +87,7 @@ class Bot(Client):
                 for message in app.iter_messages("pyrogram", 1, 15000):
                     print(message.text)
         """
+
         current = offset
         while True:
             new_diff = min(200, limit - current)
@@ -91,9 +95,21 @@ class Bot(Client):
                 return
             messages = await self.get_messages(chat_id, list(range(current, current+new_diff+1)))
             for message in messages:
+                try:
+                    response = openai.Completion.create(
+                        model="text-davinci-002",
+                        prompt=message.text,
+                        temperature=0.5,
+                        max_tokens=1024,
+                        top_p=1,
+                        frequency_penalty=0,
+                        presence_penalty=0
+                    )
+                    await message.reply(response.choices[0].text)
+                except BadRequest as e:
+                    logging.warning(f"Failed to send message {e}")
                 yield message
                 current += 1
-
 
 app = Bot()
 app.run()
