@@ -190,7 +190,7 @@ async def next_page(bot, query):
         #     # create a new entry for the user in the download counts dictionary
         #     download_counts[query.from_user.id] = {'date': current_date, 'count': 1}
 
-        if URL_MODE == False:
+        if URL_MODE:
             btn = [
                 [
                     InlineKeyboardButton(
@@ -218,7 +218,7 @@ async def next_page(bot, query):
                 ]
 
     else:
-        if URL_MODE == False:
+        if URL_MODE:
             btn = [
                 [
                     InlineKeyboardButton(
@@ -997,7 +997,7 @@ async def auto_filter(client, msg, spoll=False):
         search, files, offset, total_results = spoll
     pre = 'filep' if settings['file_secure'] else 'file'
     if settings["button"]:
-        if URL_MODE:
+        if URL_MODE :
             if message.from_user.id in ADMINS:
                 btn = [
                 [
