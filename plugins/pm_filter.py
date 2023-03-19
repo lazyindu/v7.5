@@ -30,12 +30,10 @@ from database.filters_mdb import (
     find_filter,
     get_filters,
 )
-import datetime
 # set the limit for number of downloads per user per day
 
 
 # Create dictionary to keep track of user accesses
-user_accesses = {}
 
 req_channel = REQ_CHANNEL
 
@@ -158,14 +156,6 @@ async def doc(bot, update):
 # # Born to make history @LazyDeveloper !
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
-    DOWNLOAD_LIMIT = 10
-
-# create a dictionary to store the download counts for each user
-    download_counts = {}
-
-# get the current date
-    # current_date = datetime.date.today()
-    current_date = datetime.datetime.today().strftime("%Y-%m-%d")
 
     ident, req, key, offset = query.data.split("_")
     if int(req) not in [query.from_user.id, 0]:
@@ -1007,7 +997,7 @@ async def auto_filter(client, msg, spoll=False):
         search, files, offset, total_results = spoll
     pre = 'filep' if settings['file_secure'] else 'file'
     if settings["button"]:
-        if URL_MODE == False:
+        if URL_MODE is False:
             if message.from_user.id in ADMINS:
                 btn = [
                 [
@@ -1053,7 +1043,7 @@ async def auto_filter(client, msg, spoll=False):
                 for file in files
                 ]
     else:
-        if URL_MODE == False:
+        if URL_MODE is False:
             if message.from_user.id in ADMINS:
                 btn = [
                 [
@@ -1062,7 +1052,7 @@ async def auto_filter(client, msg, spoll=False):
                     ),
                     InlineKeyboardButton(
                         text=f"{get_size(file.file_size)}",
-                        callback_data=f'{pre}#{file.file_id}',
+                        callback_data=f'files#{file.file_id}',
                     ),
                 ]
                 for file in files
@@ -1123,7 +1113,7 @@ async def auto_filter(client, msg, spoll=False):
                 ]
     btn.insert(0,
         [ 
-	    InlineKeyboardButton(text="⚡ʜᴏᴡ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ⚡", url='https://telegram.me/LazyDeveloper'),InlineKeyboardButton(text="⚡ʜᴏᴡ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ⚡", url='https://telegram.me/LazyDeveloper')
+	    InlineKeyboardButton(text="⚡ʜᴏᴡ 2 ᴅᴏᴡɴʟᴏᴀᴅ⚡", url='https://telegram.me/LazyDeveloper'),
         ] 
     )
     if offset != "":
