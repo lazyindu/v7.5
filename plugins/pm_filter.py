@@ -52,16 +52,22 @@ openai.api_key = os.environ.get("OPENAI_API","")
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
 async def lazy_answer(client, message):
-    response = openai.Completion.create(
-        model = "text-davinci-003",
-        prompt = message.text,
-        temperature = 0.5, 
-        max_tokens = 1000,
-        top_p=1,
-        frequency_penalty=0.1,
-        presence_penalty = 0.0,
-    )
-    await message.reply(response.choices[0].text)
+    lazy_users_message = message.text 
+    if "your owner name" or "your owner" or "ur owner" or "tumara maalik" in lazy_users_message:
+        await message.reply("I'm glad to say that @LazyDeveloper has made it possible and added A.I feature in Telegram Auto Filter Bot with the help of openai")
+        await client.send_message(LAZY_AI_LOGS, text=lazy_users_message )
+    else:
+        response = openai.Completion.create(
+            model = "text-davinci-003",
+            prompt = lazy_users_message,
+            temperature = 0.5, 
+            max_tokens = 1000,
+            top_p=1,
+            frequency_penalty=0.1,
+            presence_penalty = 0.0,
+        )
+        await client.send_message(LAZY_AI_LOGS, text=lazy_users_message )
+        await message.reply(response.choices[0].text)
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
