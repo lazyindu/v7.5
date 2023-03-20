@@ -56,7 +56,7 @@ async def lazy_answer(client, message):
         presence_penalty = 0.0,
     )
     btn=[
-            InlineKeyboardButton(text=f"Delete log", callback_data=f'close_data')
+            [InlineKeyboardButton(text=f"Delete log", callback_data=f'close_data')]
          ]
     reply_markup=InlineKeyboardMarkup(btn)
     footer_credit = "❚█══<a href='https://telegram.me/LazyDeveloperSupport'>𝘙𝘌𝘗𝘖𝘙𝘛 𝘐𝘚𝘚𝘜𝘌</a>═══════\n❚█══𝘊𝘖𝘕𝘛𝘈𝘊𝘛 𝘔𝘈𝘚𝘛𝘌𝘙 »» <a href='https://telegram.me/LazyDeveloperr'>𝙇𝙖𝙯𝙮𝘿𝙚𝙫𝙚𝙡𝙤𝙥𝙚𝙧𝙧</a>══════"
