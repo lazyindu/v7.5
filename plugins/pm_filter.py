@@ -59,11 +59,10 @@ async def lazy_answer(client, message):
             InlineKeyboardButton(text=f"Delete log", callback_data=f'close_data')
          ]
     reply_markup=InlineKeyboardMarkup(btn)
-    footer_credit = "»»» ❚█══ <a href='https://telegram.me/LazyDeveloperSupport'>REPORT ISSUE</a> (ᗒᗣᗕ)՞ ══█❚ ¯\_______"
+    footer_credit = "❚█══<a href='https://telegram.me/LazyDeveloperSupport'>𝘙𝘌𝘗𝘖𝘙𝘛 𝘐𝘚𝘚𝘜𝘌</a>═══════\n❚█══𝘊𝘖𝘕𝘛𝘈𝘊𝘛 𝘔𝘈𝘚𝘛𝘌𝘙 »» <a href='https://telegram.me/LazyDeveloperr'>𝙇𝙖𝙯𝙮𝘿𝙚𝙫𝙚𝙡𝙤𝙥𝙚𝙧𝙧</a>══════"
     lazy_response = response.choices[0].text 
-    await message.reply(lazy_response + footer_credit)
-    await asyncio.sleep(2)
-    await client.send_message(LAZY_AI_LOGS, text=f"⚡️#Lazy_AI_Query \n\nA user named **{message.user.mention}** with user id - `{user_id}`. Asked me this query...\n\n══════════❚█══Q࿐U࿐E࿐R࿐Y══█❚═════════\n[Q྿.]**{lazy_users_message}** ?\n\n◔̯◔Here is what i responded:\n✴࿐»`{lazy_response}`\n\n █❚══USER ID══❚══ `{user_id}` \n█❚══USER Name══❚══ `{message.from_user.mention}` " , reply_markup = reply_markup , parse_mode=enums.ParseMode.HTML)
+    await client.send_message(LAZY_AI_LOGS, text=f"⚡️#Lazy_AI_Query \n\nA user named **{message.from_user.mention}** with user id - `{user_id}`. Asked me this query...\n\n══════════❚█══Q࿐U࿐E࿐R࿐Y══█❚═════════\n[Q྿.]**{lazy_users_message}** ?\n\n◔̯◔Here is what i responded:\n✴࿐»`{lazy_response}`\n\n █❚══USER ID══❚══ `{user_id}` \n█❚══USER Name══❚══ `{message.from_user.mention}` \n\n ⇱🤷‍♀️ <a href='https://t.me/{temp.U_NAME}'>OpenChat</a> 🗃️⇲" , reply_markup = reply_markup , parse_mode=enums.ParseMode.HTML)
+    await message.reply(f"{lazy_response}\n\n\n{footer_credit}")
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
