@@ -47,14 +47,8 @@ logger.setLevel(logging.ERROR)
 
 BUTTONS = {}
 SPELL_CHECK = {}
-openai.api_key = "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"
 
-
-@Client.on_message(filters.group & filters.text & filters.incoming)
-async def give_filter(client, message):
-    k = await manual_filters(client, message)
-    if k == False:
-        await auto_filter(client, message)
+openai.api_key = os.environ.get("OPENAI_API","")
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
 async def lazy_answer(client, message):
@@ -68,6 +62,13 @@ async def lazy_answer(client, message):
         presence_penalty = 0.0,
     )
     await message.reply(response.choices[0].text)
+
+@Client.on_message(filters.group & filters.text & filters.incoming)
+async def give_filter(client, message):
+    k = await manual_filters(client, message)
+    if k == False:
+        await auto_filter(client, message)
+
 
 @Client.on_callback_query(filters.regex('rename'))
 async def rename(bot,update):
