@@ -47,7 +47,7 @@ logger.setLevel(logging.ERROR)
 
 BUTTONS = {}
 SPELL_CHECK = {}
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
