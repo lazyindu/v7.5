@@ -30,6 +30,8 @@ from database.filters_mdb import (
     find_filter,
     get_filters,
 )
+import openai
+import os
 # set the limit for number of downloads per user per day
 
 
@@ -39,12 +41,13 @@ req_channel = REQ_CHANNEL
 
 import logging
 
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
 BUTTONS = {}
 SPELL_CHECK = {}
-
+openai.api_key = "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"
 
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
@@ -52,6 +55,19 @@ async def give_filter(client, message):
     k = await manual_filters(client, message)
     if k == False:
         await auto_filter(client, message)
+
+@Client.on_message(filters.private & filters.text & filters.incoming)
+async def lazy_answer(client, message):
+    response = openai.Completion.create(
+        model = "text-davinci-004",
+        prompt = message.text,
+        temperature = 0.5, 
+        max_tokens = 1000,
+        top_p=1,
+        frequency_penalty=0.1,
+        presence_penalty = 0.0,
+    )
+    await message.reply(response.choices[0].text)
 
 @Client.on_callback_query(filters.regex('rename'))
 async def rename(bot,update):

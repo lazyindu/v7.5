@@ -16,3 +16,4 @@ aiofiles
 dnspython
 pynewtonmath
 openai
+aiogram
