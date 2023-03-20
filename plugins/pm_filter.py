@@ -32,19 +32,11 @@ from database.filters_mdb import (
 )
 import openai
 import os
-# set the limit for number of downloads per user per day
-
-
-# Create dictionary to keep track of user accesses
-
-req_channel = REQ_CHANNEL
-
 import logging
-
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
+req_channel = REQ_CHANNEL
 BUTTONS = {}
 SPELL_CHECK = {}
 
@@ -52,23 +44,26 @@ openai.api_key = OPENAI_API
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
 async def lazy_answer(client, message):
-    lazy_users_message = message.text 
-    lazy_questions = "your owner" or "tumhara malik" or "tumhara owner"
-    if lazy_questions in lazy_users_message:
-        await message.reply("I'm glad to say that @LazyDeveloper has made it possible and added A.I feature in Telegram Auto Filter Bot with the help of openai")
-        await client.send_message(LAZY_AI_LOGS, text=lazy_users_message )
-    else:
-        response = openai.Completion.create(
-            model = "text-davinci-003",
-            prompt = lazy_users_message,
-            temperature = 0.5, 
-            max_tokens = 1000,
-            top_p=1,
-            frequency_penalty=0.1,
-            presence_penalty = 0.0,
-        )
-        await client.send_message(LAZY_AI_LOGS, text=lazy_users_message )
-        await message.reply(response.choices[0].text)
+    lazy_users_message = message.text
+    user_id = message.from_user.id
+    response = openai.Completion.create(
+        model = "text-davinci-003",
+        prompt = lazy_users_message,
+        temperature = 0.5, 
+        max_tokens = 1000,
+        top_p=1,
+        frequency_penalty=0.1,
+        presence_penalty = 0.0,
+    )
+    btn=[
+            InlineKeyboardButton(text=f"Delete log", callback_data=f'close_data')
+         ]
+    reply_markup=InlineKeyboardMarkup(btn)
+    footer_credit = "»»» ❚█══ <a href='https://telegram.me/LazyDeveloperSupport'>REPORT ISSUE</a> (ᗒᗣᗕ)՞ ══█❚ ¯\_______"
+    lazy_response = response.choices[0].text 
+    await message.reply(lazy_response + footer_credit)
+    await asyncio.sleep(2)
+    await client.send_message(LAZY_AI_LOGS, text=f"⚡️#Lazy_AI_Query \n\nA user named **{message.user.mention}** with user id - `{user_id}`. Asked me this query...\n\n══════════❚█══Q࿐U࿐E࿐R࿐Y══█❚═════════\n[Q྿.]**{lazy_users_message}** ?\n\n◔̯◔Here is what i responded:\n✴࿐»`{lazy_response}`\n\n █❚══USER ID══❚══ `{user_id}` \n█❚══USER Name══❚══ `{message.from_user.mention}` " , reply_markup = reply_markup , parse_mode=enums.ParseMode.HTML)
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
