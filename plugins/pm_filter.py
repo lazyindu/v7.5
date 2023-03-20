@@ -53,7 +53,7 @@ openai.api_key = os.environ.get("OPENAI_API","")
 @Client.on_message(filters.private & filters.text & filters.incoming)
 async def lazy_answer(client, message):
     response = openai.Completion.create(
-        model = "text-davinci-004",
+        model = "text-davinci-003",
         prompt = message.text,
         temperature = 0.5, 
         max_tokens = 1000,
