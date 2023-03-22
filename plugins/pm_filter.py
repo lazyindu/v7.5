@@ -39,7 +39,6 @@ logger.setLevel(logging.ERROR)
 req_channel = REQ_CHANNEL
 BUTTONS = {}
 SPELL_CHECK = {}
-
 openai.api_key = OPENAI_API
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
@@ -56,12 +55,13 @@ async def lazy_answer(client, message):
         presence_penalty = 0.0,
     )
     btn=[
-            [InlineKeyboardButton(text=f"Delete log", callback_data=f'close_data')]
+            [InlineKeyboardButton(text=f"⇱🤷‍♀️ Take Action 🗃️⇲", url=f'https://t.me/{temp.U_NAME}')],
+            [InlineKeyboardButton(text=f"🗑 Delete log ❌", callback_data=f'close_data')],
          ]
     reply_markup=InlineKeyboardMarkup(btn)
-    footer_credit = "❚█══<a href='https://telegram.me/LazyDeveloperSupport'>𝘙𝘌𝘗𝘖𝘙𝘛 𝘐𝘚𝘚𝘜𝘌</a>═══════\n❚█══𝘊𝘖𝘕𝘛𝘈𝘊𝘛 𝘔𝘈𝘚𝘛𝘌𝘙 »» <a href='https://telegram.me/LazyDeveloperr'>𝙇𝙖𝙯𝙮𝘿𝙚𝙫𝙚𝙡𝙤𝙥𝙚𝙧𝙧</a>══════"
+    footer_credit = "❚█══<a href='https://telegram.me/LazyDeveloperSupport'>𝘙𝘌𝘗𝘖𝘙𝘛 𝘐𝘚𝘚𝘜𝘌</a>═══════\n❚█══<a href='https://telegram.me/LazyDeveloperr'>𝘊𝘖𝘕𝘛𝘈𝘊𝘛 𝘔𝘈𝘚𝘛𝘌𝘙</a>═══════"
     lazy_response = response.choices[0].text 
-    await client.send_message(LAZY_AI_LOGS, text=f"⚡️#Lazy_AI_Query \n\n• A user named **{message.from_user.mention}** with user id - `{user_id}`. Asked me this query...\n\n══❚█══Q࿐U࿐E࿐R࿐Y══█❚══\n\n[Q྿.]**{lazy_users_message}**\n\n◔̯◔Here is what i responded:\n[A྿.] `{lazy_response}`\n\n\n█❚═USER ID═❚═• `{user_id}` \n█❚═USER Name═❚═• `{message.from_user.mention}` \n\n\n ⇱🤷‍♀️ <a href='https://t.me/{temp.U_NAME}'>OpenChat</a> 🗃️⇲" , reply_markup = reply_markup , parse_mode=enums.ParseMode.HTML)
+    await client.send_message(LAZY_AI_LOGS, text=f"⚡️#Lazy_AI_Query \n\n• A user named **{message.from_user.mention}** with user id - `{user_id}`. Asked me this query...\n\══❚█══Q࿐U࿐E࿐R࿐Y══█❚══\n\n[Q྿.]**{lazy_users_message}**\n\n◔̯◔Here is what i responded:\n[A྿.] `{lazy_response}`\n\n\n █❚═USER ID═❚═• `{user_id}` \n█❚═USER Name═❚═• `{message.from_user.mention}` \n\n🗃️" , reply_markup = reply_markup )
     await message.reply(f"{lazy_response}\n\n\n{footer_credit}")
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
@@ -962,7 +962,16 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_reply_markup(reply_markup)
     await query.answer('♥️ Thank You LazyDeveloper ♥️')
 
-
+async def handle_callback(client, callback_query):
+    data = callback_query.data
+    if data.startswith("notify_user"):
+        _, user_id, movie = data.split(":")
+        # Send message to user
+        await client.send_message(int(user_id), f"Your requested movie {movie} is now available in our database!")
+        # Delete callback query message
+        await callback_query.answer()
+        await callback_query.delete()
+        
 async def auto_filter(client, msg, spoll=False):
     if not spoll:
         message = msg
@@ -972,12 +981,13 @@ async def auto_filter(client, msg, spoll=False):
             return
         if 2 < len(message.text) < 100:
             search = message.text
+            requested_movie = search.strip()
+            user_id = message.from_user.id
             files, offset, total_results = await get_search_results(search.lower(), offset=0, filter=True)
             if not files:
-                await client.send_message(req_channel,f"-🦋 #REQUESTED_CONTENT 🦋-\n\n📝**Content Name** :`{search}`\n**Requested By**: {message.from_user.first_name}\n **USER ID**:{message.from_user.id}\n\n🗃️",
+                await client.send_message(req_channel,f"-🦋 #REQUESTED_CONTENT 🦋-\n\n📝**Content Name** :`{search}`\n**Requested By**: {message.from_user.first_name}\n **USER ID**:{user_id}\n\n🗃️",
                                                                                                        reply_markup=InlineKeyboardMarkup([
-                                                                                                                                        [InlineKeyboardButton(" Already Uploaded ", callback_data="already_uploaded")],
-                                                                                                                                        [InlineKeyboardButton(" Not Available ", callback_data="req_unavailable"),InlineKeyboardButton(" Reject ", callback_data="reject_request")],
+                                                                                                                                        [InlineKeyboardButton("Available ", callback_data=f"notify_user:{user_id}:{requested_movie}")],
                                                                                                                                         [InlineKeyboardButton("🔺 Mark as Done 🔺", callback_data="close_data")],
                                                                                                                                         ]))
                 
