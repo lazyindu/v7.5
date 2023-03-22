@@ -324,6 +324,7 @@ async def advantage_spoll_choker(bot, query):
 # Born to make history @LazyDeveloper !
 @Client.on_callback_query()
 async def cb_handler(client: Client, query: CallbackQuery):
+    data = query.data
     if query.data == "close_data":
         await query.message.delete()
     elif query.data == "delallconfirm":
@@ -675,6 +676,19 @@ async def cb_handler(client: Client, query: CallbackQuery):
             reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
         )
+    elif data.startswith("notify_user"):
+        _, user_id, movie = data.split(":")
+        # Send message to user
+        try:
+            await query.answer(f"hello {user_id}, Your requested movie {movie} is now available in our database!")
+            # await client.send_message(int(user_id), f"Your requested movie {movie} is now available in our database!")
+        # Delete callback query message
+            await query.answer()
+            await query.delete()
+        except:
+            await query.answer("something went wrong", show_alert = True)
+            return
+
     elif query.data == "coct":
         buttons = [[
             InlineKeyboardButton('🚪 Back', callback_data='help')
@@ -962,15 +976,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_reply_markup(reply_markup)
     await query.answer('♥️ Thank You LazyDeveloper ♥️')
 
-async def handle_callback(client, callback_query):
-    data = callback_query.data
-    if data.startswith("notify_user"):
-        _, user_id, movie = data.split(":")
-        # Send message to user
-        await client.send_message(int(user_id), f"Your requested movie {movie} is now available in our database!")
-        # Delete callback query message
-        await callback_query.answer()
-        await callback_query.delete()
         
 async def auto_filter(client, msg, spoll=False):
     if not spoll:
