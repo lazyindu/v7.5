@@ -680,8 +680,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
         _, user_id, movie = data.split(":")
         # Send message to user
         try:
-            await query.answer(f"hello {user_id}, Your requested movie {movie} is now available in our database!")
-            # await client.send_message(int(user_id), f"Your requested movie {movie} is now available in our database!")
+            # await query.answer(f"hello {user_id}, Your requested movie {movie} is now available in our database!")
+            await client.send_message(int(user_id), f"Your requested movie {movie} is now available in our database!")
         # Delete callback query message
             await query.answer()
             await query.delete()
