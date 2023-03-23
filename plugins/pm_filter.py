@@ -722,8 +722,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
         # Delete callback query message
             await query.answer()
             await query.delete()
-        except:
-            await query.answer("something went wrong", show_alert = True)
+        except Exception as e:
+            print(e)  # print the error message
+            await query.answer("something went wrong", show_alert=True)
             return
         
     elif data.startswith("notify_user_alrupl"):
