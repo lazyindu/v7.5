@@ -716,8 +716,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
             ]]
             reply_markup = InlineKeyboardMarkup(btn)
-            await client.send_message(int(user_id), f"😒 oops! sona, Your requested content named `{movie}` is not available right now, we are really trying our best to serve you this cotent,can you please provide us some more details related to your query {movie}, \nSend details to Admin : <a href='https://telegram.me/{ADMIN_USRNM}'>**Send here...**</a>\n\n❤ Thank You for the contribution", reply_markup=reply_markup)
-            await client.edit_message_text(text=f"- __**User notified successfully sweetie...✅**__\n\n⏳Status : Upload Done.\n🪪UserID : `{user_id}`\n🎞Content : `{movie}` ")
+            msg = await client.send_message(int(user_id), f"😒 oops! sona, Your requested content named `{movie}` is not available right now, we are really trying our best to serve you this cotent,can you please provide us some more details related to your query {movie}, \nSend details to Admin : <a href='https://telegram.me/{ADMIN_USRNM}'>**Send here...**</a>\n\n❤ Thank You for the contribution", reply_markup=reply_markup)
+            chat_id = msg.chat.id
+            message_id = msg.message_id
+            await client.edit_message_text(chat_id=chat_id, message_id=message_id, text=f"- __**User notified successfully sweetie...✅**__\n\n⏳Status : Upload Done.\n🪪UserID : `{user_id}`\n🎞Content : `{movie}` ")
 
         # Delete callback query message
             await query.answer()
@@ -737,7 +739,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 InlineKeyboardButton(text=f"🐞 REPORT ISSUE 🐞", url=f"https://telegram.me/LazyDeveloperSupport")
             ],[
                 InlineKeyboardButton(text=f"⚡️ Learn Bot Making 🦋", url=f"https://youtube.com/@LazyDeveloperr")
-
             ]]
             reply_markup = InlineKeyboardMarkup(btn)
             await client.send_message(int(user_id), f"🛋 Hey sona, Your requested content named `{movie}` is already available in our database! You can easily get this movie by searching it's correct name in our official group...\nSend details to Admin : \n\n❤ Thank You for the contribution", reply_markup=reply_markup)
@@ -747,7 +748,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except:
             await query.answer("something went wrong", show_alert = True)
             return
-        
         
     elif data.startswith("notify_userupl"):
         _, user_id, movie = data.split(":")
