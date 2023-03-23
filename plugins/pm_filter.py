@@ -718,7 +718,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             reply_markup = InlineKeyboardMarkup(btn)
             msg = await client.send_message(int(user_id), f"😒 oops! sona, Your requested content named `{movie}` is not available right now, we are really trying our best to serve you this cotent,can you please provide us some more details related to your query {movie}, \nSend details to Admin : <a href='https://telegram.me/{ADMIN_USRNM}'>**Send here...**</a>\n\n❤ Thank You for the contribution", reply_markup=reply_markup)
             chat_id = msg.chat.id
-            message_id = msg.message_id
+            message_id = msg.reply_to_message.message_id
             await client.edit_message_text(chat_id=chat_id, message_id=message_id, text=f"- __**User notified successfully sweetie...✅**__\n\n⏳Status : Upload Done.\n🪪UserID : `{user_id}`\n🎞Content : `{movie}` ")
 
         # Delete callback query message
@@ -742,6 +742,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ]]
             reply_markup = InlineKeyboardMarkup(btn)
             await client.send_message(int(user_id), f"🛋 Hey sona, Your requested content named `{movie}` is already available in our database! You can easily get this movie by searching it's correct name in our official group...\nSend details to Admin : \n\n❤ Thank You for the contribution", reply_markup=reply_markup)
+            await query.edit_message_text(text=f"edited", parse_mode=enums.ParseMode.HTML)
         # Delete callback query message
             await query.answer()
             await query.delete()
