@@ -694,7 +694,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 ]]
             reply_markup = InlineKeyboardMarkup(btn)
             reply_markup_lzdv = InlineKeyboardMarkup(btn_lzdv)
-            await client.send_message(int(user_id), f"✅ Hey sona, Your requested content named `{movie}` is now available in our database! You can easily get this movie by searching it's correct name in our official group...\n\n❤ Thank You for the contribution", reply_markup=reply_markup)
+            await client.send_message(int(user_id), f"", reply_markup=reply_markup)
             await client.edit_message_text(text=f"- __**User notified successfully sweetie...✅**__\n\n⏳Status : Upload Done.\n🪪UserID : `{user_id}`\n🎞Content : `{movie}` ", reply_markup=reply_markup_lzdv)
 
         # Delete callback query message
@@ -703,28 +703,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except:
             await query.answer("something went wrong", show_alert = True)
             return
-        
-    elif data.startswith("notify_user_already_uploaded"):
-        _, user_id, movie = data.split(":")
-        # Send message to user
-        try:
-            btn = [[
-                InlineKeyboardButton(text=f"🔍 Search Here 🔎", url=f"https://telegram.me/{MOVIE_GROUP_USERNAME}")
-            ],[
-                InlineKeyboardButton(text=f"🐞 REPORT ISSUE 🐞", url=f"https://telegram.me/LazyDeveloperSupport")
-            ],[
-                InlineKeyboardButton(text=f"⚡️ Learn Bot Making 🦋", url=f"https://youtube.com/@LazyDeveloperr")
 
-            ]]
-            reply_markup = InlineKeyboardMarkup(btn)
-            await client.send_message(int(user_id), f"", reply_markup=reply_markup)
-        # Delete callback query message
-            await query.answer()
-            await query.delete()
-        except:
-            await query.answer("something went wrong", show_alert = True)
-            return
-        
     elif data.startswith("notify_user_not_avail"):
         _, user_id, movie = data.split(":")
         # Send message to user
@@ -738,7 +717,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
             ]]
             reply_markup = InlineKeyboardMarkup(btn)
-            await client.send_message(int(user_id), f"😒 oops! sona, Your requested content named `{movie}` is not available right now, we are really trying our best to serve you this cotent,can you please provide us some more details related to your query {movie}, \nSend details to Admin : @loduLalit\n\n❤ Thank You for the contribution", reply_markup=reply_markup)
+            await client.send_message(int(user_id), f"😒 oops! sona, Your requested content named `{movie}` is not available right now, we are really trying our best to serve you this cotent,can you please provide us some more details related to your query {movie}, \nSend details to Admin : <a href='https://telegram.me/{ADMIN_USRNM}'>**Send here...**</a>\n\n❤ Thank You for the contribution", reply_markup=reply_markup)
         # Delete callback query message
             await query.answer()
             await query.delete()
@@ -767,6 +746,28 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.answer("something went wrong", show_alert = True)
             return
         
+        
+    elif data.startswith("notify_userupl"):
+        _, user_id, movie = data.split(":")
+        # Send message to user
+        try:
+            btn = [[
+                InlineKeyboardButton(text=f"🔍 Search Here 🔎", url=f"https://telegram.me/{MOVIE_GROUP_USERNAME}")
+            ],[
+                InlineKeyboardButton(text=f"🐞 REPORT ISSUE 🐞", url=f"https://telegram.me/LazyDeveloperSupport")
+            ],[
+                InlineKeyboardButton(text=f"⚡️ Learn Bot Making 🦋", url=f"https://youtube.com/@LazyDeveloperr")
+
+            ]]
+            reply_markup = InlineKeyboardMarkup(btn)
+            await client.send_message(int(user_id), f"✅ Hey sona, Your requested content named `{movie}` is now available in our database! You can easily get this movie by searching it's correct name in our official group...\n\n❤ Thank You for the contribution", reply_markup=reply_markup)
+        # Delete callback query message
+            await query.answer()
+            await query.delete()
+        except:
+            await query.answer("something went wrong", show_alert = True)
+            return
+        
     elif data.startswith("notify_user_req_rejected"):
         _, user_id, movie = data.split(":")
         # Send message to user
@@ -780,7 +781,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
             ]]
             reply_markup = InlineKeyboardMarkup(btn)
-            await client.send_message(int(user_id), f"🙇‍♀️ Sorry Darling! Your requested content named `{movie}` is rejected by our **ADMiN** , we are really very sorry for the inconvenience, but we can't process your request at the moment...\n\n❤️‍🩹Keep your search environment firndly, sweetheart!", reply_markup=reply_markup)
+            await client.send_message(int(user_id), f"🙇‍♀️ Sorry Darling! Your requested content named `{movie}` is rejected by our **ADMiN**, we are really very sorry for the inconvenience, we can't process your request at the moment...\n\n❤️‍🩹Keep your search environment friendly, sweetheart!", reply_markup=reply_markup)
         # Delete callback query message
             await query.answer()
             await query.delete()
@@ -794,13 +795,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
             btn = [[
                 InlineKeyboardButton(text=f"🔍 Search Here 🔎", url=f"https://telegram.me/{MOVIE_GROUP_USERNAME}")
             ],[
-                InlineKeyboardButton(text=f"🐞 REPORT ISSUE 🐞", url=f"https://telegram.me/{MOVIE_GROUP_USERNAME}")
+                InlineKeyboardButton(text=f"🐞 REPORT ISSUE 🐞", url=f"https://telegram.me/LazyDeveloperSupport")
             ],[
                 InlineKeyboardButton(text=f"⚡️ Learn Bot Making 🦋", url=f"https://youtube.com/@LazyDeveloperr")
 
             ]]
             reply_markup = InlineKeyboardMarkup(btn)
-            await client.send_message(int(user_id), f"🌍 Your spelling matters.\nThe requested content `{movie}` is available in our database, You were unable to get it because of your spelling mistake.🧐 Please make sure you've spelled correctly while searching any content...\n\n❤Thank u for supporting us.", reply_markup=reply_markup)
+            await client.send_message(int(user_id), f"🌍 Your spelling matters.\nThe requested content `{movie}` is available in our database, You were unable to get it because of your spelling mistake.🧐 Please make sure you've spelled correctly while searching content in group...\n\n❤Thank u for supporting us.", reply_markup=reply_markup)
         # Delete callback query message
             await query.answer()
             await query.delete()
