@@ -216,6 +216,15 @@ async def next_page(bot, query):
                     ),                ]
                 for file in files
             ]
+            elif query.message.chat.id in LAZY_GROUPS:
+                btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
+                    ),
+                ]
+                for file in files
+                ]
             else:
                 btn = [
                 [
@@ -235,6 +244,14 @@ async def next_page(bot, query):
     else:
         if URL_MODE is True:
             if query.from_user.id in ADMINS or LZURL_PRIME_USERS:
+                btn = [
+                    [
+                        InlineKeyboardButton(text=f"{file.file_name}", callback_data=f'files#{file.file_id}'),
+                        InlineKeyboardButton(text=f"[{get_size(file.file_size)}]", callback_data=f'files#{file.file_id}'),
+                    ]
+                    for file in files
+                ]
+            elif query.message.chat.id in LAZY_GROUPS:
                 btn = [
                     [
                         InlineKeyboardButton(text=f"{file.file_name}", callback_data=f'files#{file.file_id}'),
@@ -965,7 +982,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await query.answer("Sorry Darling! You can't make any changes...\n\nOnly my Admin can change this setting...", show_alert = True)
         return
     elif query.data == "invalid_index_process":
-        await query.answer("Hey sweetie, please send me the last media with quote from your group.\nAnd also make sure that i am admin in your beloved group...")
+        await query.answer("⚠Invalid process detected.\n\nHey sona, please send me the last media with the **quote** from your database channel.\nAnd also make sure that i am admin in your beloved channel...", show_alert = True)
         return
     # elif query.data == "already_uploaded":
     #     if query.from_user.id not in ADMINS:
@@ -1135,7 +1152,7 @@ async def auto_filter(client, msg, spoll=False):
     pre = 'filep' if settings['file_secure'] else 'file'
     if settings["button"]:
             if URL_MODE is True:
-                if message.from_user.id in ADMINS:
+                if message.from_user.id in ADMINS or MY_USERS:
                     btn = [
                         [
                             InlineKeyboardButton(
@@ -1153,6 +1170,15 @@ async def auto_filter(client, msg, spoll=False):
                         ]
                         for file in files
                         ]
+                elif message.chat.id in LAZY_GROUPS:
+                    btn = [
+                    [
+                        InlineKeyboardButton(
+                            text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}'
+                        ),
+                    ]
+                    for file in files
+                    ]
                 else:
                     btn = [{pre}
                         [
@@ -1163,19 +1189,29 @@ async def auto_filter(client, msg, spoll=False):
                         ]
                         for file in files
                     ]
-            else    :
-                btn = [
-                    [
-                        InlineKeyboardButton(
-                            text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}'
-                        ),
+            else :
+                if message.from_user.id in ADMINS or MY_USERS:
+                    btn = [
+                        [
+                            InlineKeyboardButton(
+                                text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
+                            ),
+                        ]
+                        for file in files
                     ]
-                    for file in files
-                ]
+                else:
+                    btn = [
+                        [
+                            InlineKeyboardButton(
+                                text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}'
+                            ),
+                        ]
+                        for file in files
+                    ]
 
     else:
         if URL_MODE is True:
-            if message.from_user.id in ADMINS:
+            if message.from_user.id in ADMINS or MY_USERS:
                 btn = [
                     [
                         InlineKeyboardButton(text=f"{file.file_name}",callback_data=f'files#{file.file_id}',),
@@ -1184,6 +1220,14 @@ async def auto_filter(client, msg, spoll=False):
                     for file in files
                 ]
             elif message.from_user.id in LZURL_PRIME_USERS:
+                btn = [
+                    [
+                        InlineKeyboardButton(text=f"{file.file_name}",callback_data=f'{pre}#{file.file_id}',),
+                        InlineKeyboardButton(text=f"{get_size(file.file_size)}",callback_data=f'{pre}#{file.file_id}',),
+                    ]
+                    for file in files
+                ]
+            elif message.chat.id in LAZY_GROUPS:
                 btn = [
                     [
                         InlineKeyboardButton(text=f"{file.file_name}",callback_data=f'{pre}#{file.file_id}',),
@@ -1200,7 +1244,7 @@ async def auto_filter(client, msg, spoll=False):
                     for file in files
                 ]
         else:
-            if message.form_user.id in ADMINS:
+            if message.form_user.id in ADMINS or MY_USERS:
                 btn = [
                     [
                         InlineKeyboardButton(text=f"{file.file_name}",callback_data=f'files#{file.file_id}',),
@@ -1219,7 +1263,8 @@ async def auto_filter(client, msg, spoll=False):
 
     btn.insert(0,
         [ 
-	    InlineKeyboardButton(text="⚡ʜᴏᴡ 2 ᴅᴏᴡɴʟᴏᴀᴅ⚡", url='https://telegram.me/LazyDeveloper'),
+	    InlineKeyboardButton(text="⚡ʜᴏᴡ to ᴅᴏᴡɴʟᴏᴀᴅ⚡", url='https://telegram.me/LazyDeveloper'),
+	    InlineKeyboardButton(text="⚡⚡", callback_data = "files"),
         ] 
     )
     if offset != "":
